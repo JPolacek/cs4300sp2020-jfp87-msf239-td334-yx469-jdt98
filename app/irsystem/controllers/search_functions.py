@@ -2,7 +2,7 @@ import json
 import itertools
 
 data = {}
-with open('data/yogajournal.json') as f:
+with open('../../../data/yogajournal.json') as f:
   data = json.load(f)
 
 def boolean_search(query):
@@ -24,6 +24,9 @@ def boolean_search(query):
                 if set(combo_set).issubset(c_body_parts):
                     return_dict[combo_string].append(stretch)
     
+    if len(return_dict) == 1:
+        return return_dict
+
     for key in return_dict:
         return_dict[key] = sorted(return_dict[key])
     

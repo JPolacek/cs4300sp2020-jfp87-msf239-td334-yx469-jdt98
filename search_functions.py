@@ -2,7 +2,7 @@ import json
 import itertools
 
 data = {}
-with open('data/\yogajournal.json') as f:
+with open('data/yogajournal.json') as f:
   data = json.load(f)
 
 def boolean_search(query):

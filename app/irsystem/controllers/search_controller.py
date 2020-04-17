@@ -86,7 +86,10 @@ def boolean_search(query):
 @irsystem.route('/', methods=['GET'])
 def search():
 	query = request.args.get('search')
-	bs = boolean_search(query)
+
+	bs = {}
+	if query:
+		bs = boolean_search(query)
 
 	no_stretches = True
 	for stretch in bs:

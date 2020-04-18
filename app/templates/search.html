@@ -25,15 +25,21 @@
             </div>
             <button type="submit" class="btn btn-info"> Go! </button>
         </form>
-        <form class="form-inline global-search">
-        {% if data %}
-            <h1>{{output_message}}</h1>
-            {% for d in data %}  
-                <br>
-                <p>{{d}}</p>
-            {% endfor %}
-        {% endif %}
-        </form>
-    </body>
 
+            {% if data %}
+                <h1 align="center">{{output_message}}</h1>
+                {% for k in data %}
+                <p align="center">
+                    <br>
+                    <b>{{k}}</b>
+                    <ol style="text-align:center; list-style-position:inside;">
+                        {% for pose in data[k] %}
+                        <li>{{pose}}</li>
+                        {% endfor %}
+                    </ol>
+                </p>
+                {% endfor %}
+            {% endif %}
+
+    </body>
 </html>

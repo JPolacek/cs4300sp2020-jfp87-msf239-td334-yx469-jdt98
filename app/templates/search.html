@@ -18,7 +18,7 @@
                 What body parts do you want to stretch?
             </h2>
             <br><br>
-            
+
             <div class="form-group">
                 <input id="input" type="text" name="search" class="form-control" placeholder="Your Input">
             </div>
@@ -27,18 +27,20 @@
 
             {% if data %}
                 <h1 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110)">{{output_message}}</h1>
+                <div style="display: flex; flex-direction: row;text-align: center; justify-content:center;">
                 {% for k in data %}
-                <p margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110)">
+                <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
                     <br>
                     <b>{{k}}</b>
-                    <ol style="padding-left:0; text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110)">
+                    <div style="padding-left:0; text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110)">
                         {% for pose in data[k] %}
                         <li>{{pose}}</li>
                         {% endfor %}
-                    </ol>
-                </p>
+                    </div>
+                </div>
+
                 {% endfor %}
             {% endif %}
-
+             </div>
     </body>
 </html>

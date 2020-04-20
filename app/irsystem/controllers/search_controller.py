@@ -94,7 +94,7 @@ def search():
 	no_stretches = True
 	no_result_text = ''
 	for stretch in bs:
-		no_result_text = 'There are no results for this position :('
+		no_result_text = 'There are no results for ' + query + ' :('
 		if bs[stretch] != []:
 			no_stretches = False
 			continue

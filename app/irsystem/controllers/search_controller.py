@@ -6,7 +6,7 @@ import json
 import re
 # import search_functions as sf
 
-project_name = "Stretches: Find a stretch to help you pain"
+project_name = "Stretches: Find a stretch to help your pain"
 net_id = "Jake Polacek:jfp87 Jonathan Tran:jdt98 Matt Frucht:msf239 Teresa Datta:td334 Yifan Xu:yx469"
 
 def boolean_search(query):

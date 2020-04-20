@@ -3,6 +3,7 @@ from app.irsystem.models.helpers import *
 from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 import itertools
 import json
+import re
 # import search_functions as sf
 
 project_name = "Stretches: Find a stretch to help you pain"
@@ -12,8 +13,12 @@ def boolean_search(query):
 	"""
 	Given a query, return the stretches that work on each body part
 	"""
+	strip_set = lambda x : {ele.strip() for ele in x}
 	q_lower = query.lower()
-	q_body_parts = q_lower.split(' and ')
+	q_body_parts = re.split('and |, ', q_lower)
+	while '' in q_body_parts:
+		q_body_parts.remove('')
+
 	return_dict = {}
 
 	with open('data/yogajournal.json') as f:
@@ -22,20 +27,26 @@ def boolean_search(query):
 	for i in range(1, len(q_body_parts)+1):
 		combos = list(itertools.combinations(q_body_parts, i))
 		for combo in combos:
-			combo_set = set(combo)
+			combo_set = strip_set(set(combo))
 			combo_string = ', '.join(combo_set)
 			return_dict[combo_string] = []
 			for stretch in data:
 				c_body_parts = set(data[stretch]["body_part"])
 				if set(combo_set).issubset(c_body_parts):
 					return_dict[combo_string].append(stretch)
+
+	rm_dict = []
+	for key in return_dict:
+		return_dict[key] = sorted(return_dict[key])
+		if return_dict[key] == []:
+			rm_dict.append(key)
+	
+	for key in rm_dict:
+		del return_dict[key]
 	
 	if len(return_dict) == 1:
 		return return_dict
 
-	for key in return_dict:
-		return_dict[key] = sorted(return_dict[key])
-	
 	deduped_return_dict = {}
 	for combo in list(itertools.combinations(return_dict, 2)):
 		a = combo[0]
@@ -81,6 +92,9 @@ def boolean_search(query):
 		else:
 			deduped_return_dict[b] = b_list
 
+	for key in rm_dict:
+		deduped_return_dict[key] = []
+	
 	return deduped_return_dict
 
 @irsystem.route('/', methods=['GET'])
@@ -91,15 +105,20 @@ def search():
 	if query:
 		bs = boolean_search(query)
 
-	no_stretches = True
+	# no_stretches = True
 	no_result_text = ''
-	for stretch in bs:
-		no_result_text = 'There are no results for ' + query + ' :('
-		if bs[stretch] != []:
-			no_stretches = False
-			continue
+	
+	print(bs)
+	keys_to_remove = [key for key in bs if bs[key] == []]
+	print(keys_to_remove)
 
-	if no_stretches:
+	for key in keys_to_remove:
+		no_result_text = 'There are no results for ' + query + ' :('
+		del bs[key]		
+
+	print(bs)
+
+	if len(bs) == 0:
 		data = [""]
 		output_message = no_result_text
 	else:

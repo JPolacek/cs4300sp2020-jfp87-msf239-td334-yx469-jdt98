@@ -156,18 +156,17 @@ for i in range(nrow):
         # print(row)
         # print("!" *12)
         
-print(len(sport_names))
-print(len(muscle_names))
+
 named_dict = {}
 i = 0
 for key in exercise_dict:
     named_dict[header_names[i]] = {"description" : exercise_dict[key], "muscles" : muscle_names[i], "sports" : sport_names[i]}
     i += 1
         
-# print(exercise_dict)
-f = open("exercise.json", "w")
-json.dump(named_dict, f)
-f.close()
+
+# f = open("exercise.json", "w")
+# json.dump(named_dict, f)
+# f.close()
 
         
         

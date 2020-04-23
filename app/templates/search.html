@@ -2,6 +2,7 @@
     <head>
         <link rel="stylesheet" href="/static/bootstrap.min.css">
         <link rel="stylesheet" href="/static/main.css">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
     </head>
     <body style="background-color: rgb(255, 244, 227)">
         <div class="topcorner">
@@ -33,8 +34,10 @@
                     <br>
                     <b>{{k}}</b>
                     <div style="padding-left:0; text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110)">
-                        {% for pose in data[k] %}
-                        <li>{{pose}}</li>
+                        {% for pose, url in data[k] %}
+                        <li>
+                            <a href={{url}}>{{pose}}</a>
+                        </li>
                         {% endfor %}
                     </div>
                 </div>

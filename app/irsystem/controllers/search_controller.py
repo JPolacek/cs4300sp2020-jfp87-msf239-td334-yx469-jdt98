@@ -43,12 +43,21 @@ def boolean_search(query):
 	
 	for key in rm_dict:
 		del return_dict[key]
-	
-	if len(return_dict) == 1:
-		return return_dict
+
+	rd = {}
+	for bp in return_dict:
+		rd[bp] = []
+		for i, s in enumerate(return_dict[bp]):
+			tup = (s, data[s]["url"])
+			rd[bp].append(tup)
+
+	print("rd: " + str(rd))
+
+	if len(rd) == 1:
+		return rd
 
 	deduped_return_dict = {}
-	for combo in list(itertools.combinations(return_dict, 2)):
+	for combo in list(itertools.combinations(rd, 2)):
 		a = combo[0]
 		b = combo[1]
 
@@ -56,11 +65,11 @@ def boolean_search(query):
 			continue
 		
 		a_pointer = 0
-		last_a = len(return_dict[a])
+		last_a = len(rd[a])
 		a_list = []
 
 		b_pointer = 0
-		last_b = len(return_dict[b])
+		last_b = len(rd[b])
 		b_list = []
 
 		while(a_pointer < last_a and b_pointer < last_b):
@@ -105,18 +114,13 @@ def search():
 	if query:
 		bs = boolean_search(query)
 
-	# no_stretches = True
 	no_result_text = ''
-	
-	print(bs)
+
 	keys_to_remove = [key for key in bs if bs[key] == []]
-	print(keys_to_remove)
 
 	for key in keys_to_remove:
 		no_result_text = 'There are no results for ' + query + ' :('
 		del bs[key]		
-
-	print(bs)
 
 	if len(bs) == 0:
 		data = [""]

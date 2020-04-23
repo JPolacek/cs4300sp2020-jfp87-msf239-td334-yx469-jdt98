@@ -51,8 +51,6 @@ def boolean_search(query):
 			tup = (s, data[s]["url"])
 			rd[bp].append(tup)
 
-	print("rd: " + str(rd))
-
 	if len(rd) == 1:
 		return rd
 
@@ -73,20 +71,20 @@ def boolean_search(query):
 		b_list = []
 
 		while(a_pointer < last_a and b_pointer < last_b):
-			a_val = return_dict[a][a_pointer]
-			b_val = return_dict[b][b_pointer]
+			a_val = rd[a][a_pointer]
+			b_val = rd[b][b_pointer]
 
-			if a_val == b_val:
+			if a_val[0] == b_val[0]:
 				if a in b:
 					b_list.append(b_val)
 				else:
 					a_list.append(a_val)
 				a_pointer += 1
 				b_pointer += 1
-			elif a_val < b_val:
+			elif a_val[0] < b_val[0]:
 				a_list.append(a_val)
 				a_pointer += 1
-			elif b_val < a_val:
+			elif b_val[0] < a_val[0]:
 				b_pointer += 1
 
 		if a in deduped_return_dict:
@@ -128,6 +126,7 @@ def search():
 	else:
 		output_message = "Your search: " + query
 		data = bs
+
 	return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=data)
 
 

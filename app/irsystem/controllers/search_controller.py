@@ -33,7 +33,7 @@ def boolean_search(query):
 			for stretch in data:
 				c_body_parts = set(data[stretch]["body_part"])
 				if set(combo_set).issubset(c_body_parts):
-					return_dict[combo_string].append(stretch)
+					return_dict[combo_string].append((stretch, data[stretch]["url"]))
 
 	rm_dict = []
 	for key in return_dict:
@@ -44,18 +44,11 @@ def boolean_search(query):
 	for key in rm_dict:
 		del return_dict[key]
 
-	rd = {}
-	for bp in return_dict:
-		rd[bp] = []
-		for i, s in enumerate(return_dict[bp]):
-			tup = (s, data[s]["url"])
-			rd[bp].append(tup)
-
-	if len(rd) == 1:
-		return rd
+	if len(return_dict) == 1:
+		return return_dict
 
 	deduped_return_dict = {}
-	for combo in list(itertools.combinations(rd, 2)):
+	for combo in list(itertools.combinations(return_dict, 2)):
 		a = combo[0]
 		b = combo[1]
 
@@ -63,16 +56,16 @@ def boolean_search(query):
 			continue
 		
 		a_pointer = 0
-		last_a = len(rd[a])
+		last_a = len(return_dict[a])
 		a_list = []
 
 		b_pointer = 0
-		last_b = len(rd[b])
+		last_b = len(return_dict[b])
 		b_list = []
 
 		while(a_pointer < last_a and b_pointer < last_b):
-			a_val = rd[a][a_pointer]
-			b_val = rd[b][b_pointer]
+			a_val = return_dict[a][a_pointer]
+			b_val = return_dict[b][b_pointer]
 
 			if a_val[0] == b_val[0]:
 				if a in b:

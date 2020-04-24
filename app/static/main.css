@@ -36,3 +36,9 @@ border: none
 .step-links a{
 color: #4285F4;
 }
+li img {
+display: none;
+}  
+li a:hover + img {
+display: block;
+}

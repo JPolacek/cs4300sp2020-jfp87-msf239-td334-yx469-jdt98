@@ -33,7 +33,7 @@ def boolean_search(query):
 			for stretch in data:
 				c_body_parts = set(data[stretch]["body_part"])
 				if set(combo_set).issubset(c_body_parts):
-					return_dict[combo_string].append((stretch, data[stretch]["url"]))
+					return_dict[combo_string].append((stretch, data[stretch]["url"], data[stretch]["image_name"]))
 
 	rm_dict = []
 	for key in return_dict:
@@ -121,6 +121,3 @@ def search():
 		data = bs
 
 	return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=data)
-
-
-

@@ -2,17 +2,24 @@ import json
 import itertools
 import re
 
+def clean_up(s):
+	q_lower = s.lower()
+	q_body_parts = re.split('and |, ', q_lower)
+	print(q_body_parts)
+	while '' in q_body_parts:
+		q_body_parts.remove('')
+	
+	return q_body_parts
+
 def boolean_search(data, query):
 	"""
 	Given a query, return the stretches that work on each body part
 	"""
-	strip_set = lambda x : {ele.strip() for ele in x}
-	q_lower = query.lower()
-	q_body_parts = re.split('and |, ', q_lower)
-	while '' in q_body_parts:
-		q_body_parts.remove('')
+	
+	q_body_parts = clean_up(query)
 
 	return_dict = {}
+	strip_set = lambda x : {ele.strip() for ele in x}
 
 	for i in range(1, len(q_body_parts)+1):
 		combos = list(itertools.combinations(q_body_parts, i))
@@ -84,5 +91,5 @@ def boolean_search(data, query):
 
 	for key in rm_dict:
 		deduped_return_dict[key] = []
-	
+    
 	return deduped_return_dict

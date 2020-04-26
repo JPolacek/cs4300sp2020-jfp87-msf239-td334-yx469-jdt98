@@ -31,13 +31,17 @@
                 <div style="display: flex; flex-direction: row;text-align: center; justify-content:center;">
                 {% if success %}
                     {% if typos %}
+                    <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
+                        <i>It seems as if some of the body parts you looked up could be mistyped. <br>
+                            Here are some possible words you could have meant:</i>
+                        <div style="padding-left:0; text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110)">
                         {% for typo in potential_typos %}
-                        <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
                             <li>
-                                <b>{{body_part}}</b>
+                                <b>{{typo}}</b>
                             </li>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
+                    </div>
                     {% endif %}
                     {% for k in data %}
                     <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
@@ -54,7 +58,7 @@
                     </div>
                     {% endfor %}
                 {% endif %}
-                {% if not success and not bad_search and query %}
+                {% if not success and not no_known_typos %}
                     <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
                         {% for body_part in potential_typos %}
                             <li>
@@ -63,7 +67,7 @@
                         {% endfor %}                   
                     </div>
                 {% endif %}
-                {% if not success and bad_search %}
+                {% if not success and no_known_typos %}
                     <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
                         {{data}}
                     </div>

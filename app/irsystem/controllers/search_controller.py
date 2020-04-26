@@ -28,13 +28,19 @@ def search():
 	no_result_text = ''
 	keys_to_remove = []
 	potential_typos = []
+	typos = False
+	no_known_typos = False
 
 	bs = {}
 	if query:
 		bs = sf.boolean_search(data, query)
 		keys_to_remove = [key for key in bs if bs[key] == []]
-		potential_typos = [bp for dist, bp in \
-			find_similar_query(query, [key for key in keys_to_remove if ',' not in key]) if dist < 3]
+		for term in sf.clean_up(query):
+			if term not in keys_to_remove:
+				typos = True
+			potential_typos += [bp for dist, bp in \
+				find_similar_query(term, [key for key in keys_to_remove if ',' not in key]) if dist < 3]
+		potential_typos = list(set(potential_typos))
 
 
 	for key in keys_to_remove:
@@ -42,11 +48,11 @@ def search():
 
 	if len(bs) == 0:
 		if query:
-			print("in len bs == 0 in query")
 			import_data = potential_typos
 			no_result_text = 'There are no results for ' + query +\
 				' :(\nConsider trying any of these other body areas:'
-			if len(import_data) == 0:
+			if len(potential_typos) == 0:
+				no_known_typos = True
 				import_data = valid_query_invalid_bp
 		else:
 			import_data = [""]
@@ -59,10 +65,11 @@ def search():
 
 	print("success=" + str((len(bs) != 0)))
 	print("bad_search=" + str(import_data==valid_query_invalid_bp))
-	# print("data: " + str(import_data))
+	if query: 
+		print("query: " + query + " " + str(bool(query)))
 	print("Potential Typos: " + str(potential_typos))
-	print("Typo=" + str(len(potential_typos)>0))
+	print("Typo=" + str(typos))
 
 	return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data, \
-		success=(len(bs) != 0), potential_typos=potential_typos, typos=(len(potential_typos)>0),\
-			bad_search=(import_data==valid_query_invalid_bp))
+		success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,\
+			no_known_typos=no_known_typos)

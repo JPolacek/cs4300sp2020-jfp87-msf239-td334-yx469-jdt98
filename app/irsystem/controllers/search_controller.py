@@ -13,7 +13,6 @@ data = ''
 valid_query_invalid_bp = "We're uncertain what body part you're looking for, your query doesn't make sense."
 
 with open('data/description_yoga_json.json') as f:
-# with open('data/yogajournal.json') as f:
 		data = json.load(f)
 
 def find_similar_query(query, query_list):

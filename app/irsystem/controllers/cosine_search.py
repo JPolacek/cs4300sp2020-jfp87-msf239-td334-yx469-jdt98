@@ -69,8 +69,12 @@ stretches_tf_idf = tfidf_vec.fit_transform(
     [d for d in stretch_list]).toarray()
 index_to_vocab = {i: v for i, v in enumerate(tfidf_vec.get_feature_names())}
 processor = tfidf_vec.build_preprocessor()
-query = ["stretch my leg and my head easy exercise toe hand"]
+query = ["back"]
 query_fit = tfidf_vec.transform(query).toarray().transpose()
 rank = get_sim(query_fit, stretches_tf_idf)
-print(rank)
-print(stretch_list[92])
+print("Query is : " + query[0])
+print("Top 10 Ranking !!!")
+for idx, sim in rank[:10]:
+    print(stretch_list[idx])
+    print(sim)
+    print("#"*10)

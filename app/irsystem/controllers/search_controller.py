@@ -12,7 +12,8 @@ net_id = "Jake Polacek:jfp87 Jonathan Tran:jdt98 Matt Frucht:msf239 Teresa Datta
 data = ''
 valid_query_invalid_bp = "We're uncertain what body part you're looking for, your query doesn't make sense."
 
-with open('data/yogajournal.json') as f:
+with open('data/description_yoga_json.json') as f:
+# with open('data/yogajournal.json') as f:
 		data = json.load(f)
 
 def find_similar_query(query, query_list):
@@ -36,10 +37,10 @@ def search():
 		bs = sf.boolean_search(data, query)
 		keys_to_remove = [key for key in bs if bs[key] == []]
 		for term in sf.clean_up(query):
-			if term not in keys_to_remove:
+			if term not in keys_to_remove and term not in bs:
 				typos = True
 			potential_typos += [bp for dist, bp in \
-				find_similar_query(term, [key for key in keys_to_remove if ',' not in key]) if dist < 3]
+				find_similar_query(term, [key for key in keys_to_remove if ',' not in key]) if dist < 3 and dist > 0]
 		potential_typos = list(set(potential_typos))
 
 

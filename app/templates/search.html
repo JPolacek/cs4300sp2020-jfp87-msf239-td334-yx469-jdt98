@@ -1,78 +1,103 @@
 <html>
-    <head>
-        <link rel="stylesheet" href="/static/bootstrap.min.css">
-        <link rel="stylesheet" href="/static/main.css">
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
-    </head>
-    <body style="background-color: rgb(255, 244, 227)">
-        <div class="topcorner">
-            <p>Project Name: {{ name }}</p>
-            <p>Student Name: ({{ netid }})</p>
-        </div>
-        <form class="form-inline global-search">
-            <!-- <h1 style="font-size: 55px; font-family:Geneva; color: rgb(18, 58, 110)">
+
+<head>
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/main.css">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+</head>
+
+<body style="background-color: rgb(255, 244, 227)">
+    <!-- <div class="topcorner">
+        <p>Project Name: {{ name }}</p>
+        <p>Student Name: ({{ netid }})</p>
+    </div> -->
+    <form class="form-inline global-search">
+        <!-- <h1 style="font-size: 55px; font-family:Geneva; color: rgb(18, 58, 110)">
                 Stretches
             </h1> -->
-            
-            <br><br>
-            <h2 style="font-size: 30px; font-family:Gill Sans; color: rgb(18, 58, 110)">
-                What body parts do you want to stretch?
-            </h2>
-            <br><br>
 
-            <div class="form-group">
-                <input id="input" type="text" name="search" class="form-control" placeholder="Your Input">
+        <!-- <br><br> -->
+        <h2 style="font-size: 180px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+            Flexy.
+        </h2>
+        <br>
+        <h3 style="font-size: 30px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+            generate a personalized stretching routine.
+        </h3>
+
+        <br><br>
+
+        <div class="form-group">
+            <input id="input" type="text" name="search" class="form-control"
+                placeholder="body part(s) to target: neck and back">
+        </div>
+        <div class="form-group">
+            <input id="input2" type="text" name="search" class="form-control"
+                placeholder="other requests: easy, no equipment">
+        </div>
+        <button type="submit" class="btn btn-info"> Go! </button>
+        <br>
+
+        <h3 style="font-size: 15px; font-family:Gill Sans; color: grey">
+            jfp87, msf239, td334, yx469, jdt98
+        </h3>
+    </form>
+
+    {% if data %}
+    <h1 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110)">{{output_message}}</h1>
+    <div style="display: flex; flex-direction: row;text-align: center; justify-content:center;">
+        {% if success %}
+        <!-- There were results generated based on the search query -->
+        {% if typos %}
+        <!-- Even though some results were found, there were some terms that didn't have results. These are printed in the following div-->
+        <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
+            <i>It seems as if some of the body parts you looked up could be mistyped. <br>
+                Here are some possible words you could have meant:</i>
+            <div
+                style="padding-left:0; text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110)">
+                {% for typo in potential_typos %}
+                <li>
+                    <b>{{typo}}</b>
+                </li>
+                {% endfor %}
             </div>
-            <button type="submit" class="btn btn-info"> Go! </button>
-        </form>
+        </div>
+        {% endif %}
+        {% for k in data %}
+        <!-- Print out all of the poses that were successfully found -->
+        <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
+            <br>
+            <b>{{k}}</b>
+            <div
+                style="padding-left:0; text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110)">
+                {% for pose, url, img in data[k] %}
+                <li>
+                    <a href={{url}}>{{pose}}</a>
+                    <img src={{img}}>
+                </li>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% if not success and not no_known_typos %}
+        <!-- There were no successful results, and only possible typos were found -->
+        <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
+            {% for body_part in potential_typos %}
+            <li>
+                <b>{{body_part}}</b>
+            </li>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if not success and no_known_typos %}
+        <!-- The query was so bad, that there weren't even any typos found -->
+        <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
+            {{data}}
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+</body>
 
-            {% if data %}
-                <h1 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110)">{{output_message}}</h1>
-                <div style="display: flex; flex-direction: row;text-align: center; justify-content:center;">
-                {% if success %} <!-- There were results generated based on the search query -->
-                    {% if typos %} <!-- Even though some results were found, there were some terms that didn't have results. These are printed in the following div-->
-                    <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
-                        <i>It seems as if some of the body parts you looked up could be mistyped. <br>
-                            Here are some possible words you could have meant:</i>
-                        <div style="padding-left:0; text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110)">
-                        {% for typo in potential_typos %}
-                            <li>
-                                <b>{{typo}}</b>
-                            </li>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% for k in data %} <!-- Print out all of the poses that were successfully found -->
-                    <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
-                        <br>
-                        <b>{{k}}</b>
-                        <div style="padding-left:0; text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110)">
-                            {% for pose, url, img in data[k] %}
-                            <li>
-                                <a href={{url}}>{{pose}}</a>
-                                <img src={{img}}>
-                            </li>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                {% endif %}
-                {% if not success and not no_known_typos %} <!-- There were no successful results, and only possible typos were found -->
-                    <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
-                        {% for body_part in potential_typos %}
-                            <li>
-                                <b>{{body_part}}</b>
-                            </li>
-                        {% endfor %}                   
-                    </div>
-                {% endif %}
-                {% if not success and no_known_typos %} <!-- The query was so bad, that there weren't even any typos found -->
-                    <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
-                        {{data}}
-                    </div>
-                {% endif %}
-            {% endif %}
-             </div>
-    </body>
 </html>

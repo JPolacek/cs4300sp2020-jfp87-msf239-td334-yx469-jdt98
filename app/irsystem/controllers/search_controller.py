@@ -36,12 +36,11 @@ def search():
 		bs = sf.boolean_search(data, query)
 		keys_to_remove = [key for key in bs if bs[key] == []]
 		for term in sf.clean_up(query):
-			if term not in keys_to_remove and term not in bs:
+			if term not in keys_to_remove and term not in bs.keys():
 				typos = True
 			potential_typos += [bp for dist, bp in \
 				find_similar_query(term, [key for key in keys_to_remove if ',' not in key]) if dist < 3 and dist > 0]
 		potential_typos = list(set(potential_typos))
-
 
 	for key in keys_to_remove:
 		del bs[key]		
@@ -57,18 +56,10 @@ def search():
 		else:
 			import_data = [""]
 
-		print(import_data)
 		output_message = no_result_text
 	else:
 		output_message = "Your search: " + query
 		import_data = bs
-
-	print("success=" + str((len(bs) != 0)))
-	print("bad_search=" + str(import_data==valid_query_invalid_bp))
-	if query: 
-		print("query: " + query + " " + str(bool(query)))
-	print("Potential Typos: " + str(potential_typos))
-	print("Typo=" + str(typos))
 
 	return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data, \
 		success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,\

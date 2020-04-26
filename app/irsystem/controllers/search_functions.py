@@ -2,14 +2,15 @@ import json
 import itertools
 import re
 
+strip_set = lambda x : {ele.strip() for ele in x}
+
 def clean_up(s):
 	q_lower = s.lower()
 	q_body_parts = re.split('and |, ', q_lower)
-	print(q_body_parts)
 	while '' in q_body_parts:
 		q_body_parts.remove('')
 	
-	return q_body_parts
+	return list(strip_set(q_body_parts))
 
 def boolean_search(data, query):
 	"""
@@ -19,7 +20,6 @@ def boolean_search(data, query):
 	q_body_parts = clean_up(query)
 
 	return_dict = {}
-	strip_set = lambda x : {ele.strip() for ele in x}
 
 	for i in range(1, len(q_body_parts)+1):
 		combos = list(itertools.combinations(q_body_parts, i))

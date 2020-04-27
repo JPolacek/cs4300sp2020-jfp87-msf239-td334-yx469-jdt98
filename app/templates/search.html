@@ -73,7 +73,7 @@
                 <table>
                     {% for pose, url, img, description in data[k] %}
                     <tr>
-                        <td>{{pose}}</td>
+                        <td><a href={{url}}>{{pose}}</a></td>
                         <td><img src=data/yoga_journal_images/{{img}}></td>
                         <td>{{description}}</td>
                     </tr>

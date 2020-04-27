@@ -73,9 +73,9 @@
                 <table>
                     {% for pose, url, img, description in data[k] %}
                     <tr>
-                        <td><a href={{url}}>{{pose}}</a></td>
-                        <td><img src=static/yoga_journal_images/{{img}}></td>
-                        <td>{{description}}</td>
+                        <td class="pose_entry"><a href={{url}}>{{pose}}</a></td>
+                        <td class="img_entry"><img src=static/yoga_journal_images/{{img}}></td>
+                        <td class="desc_entry"><p>{{description}}</p></td>
                     </tr>
                     {% endfor %}
                     </table>

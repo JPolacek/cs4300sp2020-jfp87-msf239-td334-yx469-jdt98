@@ -44,12 +44,31 @@ display: block;
 }
 
 td {
-margin:10px;
-padding:5px;
+height: 200px;
 margin:2px;
 border: 1px solid rgb(18, 58, 110);
 }
 
 tr {
 margin:2;
+}
+
+.img_entry {
+   padding-left: 2px;
+   padding-right: 2px;
+
+}
+
+.img_entry img {
+    height: 200px;
+}
+
+.desc_entry p {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    padding-left: 15px;
+    padding-right:15x;
 }

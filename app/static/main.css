@@ -53,14 +53,15 @@ tr {
 margin:2;
 }
 
-.img_entry {
+/* .img_entry {
    padding-left: 2px;
    padding-right: 2px;
-
-}
+} */
 
 .img_entry img {
     height: 200px;
+    display:block;
+    margin:auto;
 }
 
 .desc_entry p {

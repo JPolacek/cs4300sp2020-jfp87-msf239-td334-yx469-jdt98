@@ -87,16 +87,16 @@ def body_description_cossim(body_part, description):
     """
 
     file_stretch_list = open(
-        "../../../data/stretch_descriptions_list", "rb")
+        "data/stretch_descriptions_list", "rb")
     stretch_list = pickle.load(file_stretch_list)
 
-    file_tf_idf_vectorizer = open("../../../data/tf_idf_vectorizer", "rb")
+    file_tf_idf_vectorizer = open("data/tf_idf_vectorizer", "rb")
     tfidf_vec = pickle.load(file_tf_idf_vectorizer)
 
-    file_tf_idf_matrix = open("../../../data/tf_idf_matrix", "rb")
+    file_tf_idf_matrix = open("data/tf_idf_matrix", "rb")
     stretches_tf_idf = pickle.load(file_tf_idf_matrix)
 
-    file_doc_to_index = open("../../../data/doc_to_index", "rb")
+    file_doc_to_index = open("data/doc_to_index", "rb")
     doc_to_index = pickle.load(file_doc_to_index)
 
     # turn body part into tf-idf weighting

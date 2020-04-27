@@ -58,7 +58,6 @@ def search():
 
 		output_message = no_result_text
 	else:
-		print(bs)
 		output_message = "Your search: " + query
 		import_data = bs
 

@@ -87,16 +87,16 @@ def body_description_cossim(body_part, description):
     """
 
     file_stretch_list = open(
-        "../../../data/stretch_descriptions_list.dat", "rb")
+        "../../../data/stretch_descriptions_list", "rb")
     stretch_list = pickle.load(file_stretch_list)
 
-    file_tf_idf_vectorizer = open("../../../data/tf_idf_vectorizer.dat", "rb")
+    file_tf_idf_vectorizer = open("../../../data/tf_idf_vectorizer", "rb")
     tfidf_vec = pickle.load(file_tf_idf_vectorizer)
 
-    file_tf_idf_matrix = open("../../../data/tf_idf_matrix.dat", "rb")
+    file_tf_idf_matrix = open("../../../data/tf_idf_matrix", "rb")
     stretches_tf_idf = pickle.load(file_tf_idf_matrix)
 
-    file_doc_to_index = open("../../../data/doc_to_index.dat", "rb")
+    file_doc_to_index = open("../../../data/doc_to_index", "rb")
     doc_to_index = pickle.load(file_doc_to_index)
 
     # turn body part into tf-idf weighting
@@ -111,6 +111,10 @@ def body_description_cossim(body_part, description):
     # Cosine similarity between body and descritipion
     cossim = np.dot(body_fit, description_fit)
     return cossim
+
+
+# print(body_description_cossim("knees",
+#                               "Kneel face down with your knees and toes facing out. Lean forward and let your knees move outwards."))
 
 
 def boolean_cossim(dictionary):
@@ -185,14 +189,17 @@ def pickle_data():
     doc_to_index = {d: i for i, d in enumerate(stretch_list)}
 
     file_stretch_list = open(
-        "../../../data/stretch_descriptions_list.dat", "wb")
+        "../../../data/stretch_descriptions_list", "wb")
     pickle.dump(stretch_list, file_stretch_list)
 
-    file_tf_idf_vectorizer = open("../../../data/tf_idf_vectorizer.dat", "wb")
+    file_tf_idf_vectorizer = open("../../../data/tf_idf_vectorizer", "wb")
     pickle.dump(tfidf_vec, file_tf_idf_vectorizer)
 
-    file_tf_idf_matrix = open("../../../data/tf_idf_matrix.dat", "wb")
+    file_tf_idf_matrix = open("../../../data/tf_idf_matrix", "wb")
     pickle.dump(stretches_tf_idf, file_tf_idf_matrix)
 
-    file_doc_to_index = open("../../../data/doc_to_index.dat", "wb")
+    file_doc_to_index = open("../../../data/doc_to_index", "wb")
     pickle.dump(doc_to_index, file_doc_to_index)
+
+
+# pickle_data()

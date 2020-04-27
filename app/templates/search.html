@@ -69,13 +69,17 @@
             <br>
             <b>{{k}}</b>
             <div
-                style="padding-left:0; text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110)">
-                {% for pose, url, img in data[k] %}
-                <li>
-                    <a href={{url}}>{{pose}}</a>
-                    <img src={{img}}>
-                </li>
-                {% endfor %}
+                style="padding-left:0; text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110); padding-left: 14%; padding-right: 14%;">
+                <table>
+                    {% for pose, url, img, description in data[k] %}
+                    <tr>
+                        <td>{{pose}}</td>
+                        <td><img src=data/yoga_journal_images/{{img}}></td>
+                        <td>{{description}}</td>
+                    </tr>
+                    {% endfor %}
+                    </table>
+                
             </div>
         </div>
         {% endfor %}

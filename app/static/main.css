@@ -42,3 +42,14 @@ display: none;
 li a:hover + img {
 display: block;
 }
+
+td {
+margin:10px;
+padding:5px;
+margin:2px;
+border: 1px solid rgb(18, 58, 110);
+}
+
+tr {
+margin:2;
+}

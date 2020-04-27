@@ -1,6 +1,7 @@
 import json
 import itertools
 import re
+from app.irsystem.controllers.cosine_search import *
 
 strip_set = lambda x : {ele.strip() for ele in x}
 
@@ -43,7 +44,7 @@ def boolean_search(data, query):
 		del return_dict[key]
 
 	if len(return_dict) == 1:
-		return return_dict
+		return boolean_cossim(return_dict)
 
 	deduped_return_dict = {}
 	for combo in list(itertools.combinations(return_dict, 2)):
@@ -93,4 +94,4 @@ def boolean_search(data, query):
 	for key in rm_dict:
 		deduped_return_dict[key] = []
     
-	return deduped_return_dict
+	return boolean_cossim(deduped_return_dict)

@@ -123,7 +123,7 @@ def boolean_cossim(dictionary):
         document_list = dictionary[key]
         sorted_documents = sorted(
             document_list,
-            lambda tup: body_description_cossim(key, tup[-1]),
+            key=lambda tup: body_description_cossim(key, tup[-1]),
             reverse=True)
         ranked_dict[key] = sorted_documents
     return ranked_dict

@@ -39,7 +39,7 @@ def search():
 			if term not in keys_to_remove and term not in bs.keys():
 				typos = True
 			potential_typos += [bp for dist, bp in \
-				find_similar_query(term, [key for key in keys_to_remove if ',' not in key]) if dist < 3 and dist > 0]
+				find_similar_query(term, [key for key in keys_to_remove if ',' not in key]) if dist < 5 and dist > 0]
 		potential_typos = list(set(potential_typos))
 
 	for key in keys_to_remove:

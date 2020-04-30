@@ -110,8 +110,12 @@ def rocchio(database, boolean_query, cosine_query):
 
     Warning: SIMPLE TOKENIZER used: I use split() as a tokenizer
     """
-    relevant = database['relevant'][boolean_query]
-    irrelevant = database['irrelevant'][boolean_query]
+    relevant = []
+    if boolean_query in database['relevant']:
+        relevant = database['relevant'][boolean_query]
+    irrelevant = []
+    if boolean_query in database['irrelevant']:
+        irrelevant = database['irrelevant'][boolean_query]
     tokenized_cosine_query = cosine_query.split()
     return simple_rocchio_helper(tokenized_cosine_query, relevant, irrelevant)
 

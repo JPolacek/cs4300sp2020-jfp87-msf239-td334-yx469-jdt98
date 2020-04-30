@@ -4,6 +4,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import scipy.sparse
 from sklearn.decomposition import TruncatedSVD
 import pickle
+from app.irsystem.controllers.rocchio import *
 
 c_SPACE = " "
 
@@ -117,17 +118,24 @@ def body_description_cossim(body_part, description):
 #                               "Kneel face down with your knees and toes facing out. Lean forward and let your knees move outwards."))
 
 
-def boolean_cossim(dictionary):
+def boolean_cossim(dictionary, additional_query):
     """
     [boolean_cossim(dictionary)] is the ranking using cosine similarity
     for all the returned documents in the dictionary
     """
+    db = init_database()  # NEED TO MAKE THIS PERSISTANT
     ranked_dict = dict()
     for key in dictionary:
         document_list = dictionary[key]
         sorted_documents = sorted(
             document_list,
-            key=lambda tup: body_description_cossim(key, tup[-1]),
+            # old call was:
+            # key=lambda tup: body_description_cossim(
+            #     (key + " " + additional_query).strip(), tup[-1]),
+            # reverse=True)
+            key=lambda tup: body_description_cossim(
+                rocchio(db, key, (key + " " + additional_query).strip()),
+                tup[-1]),
             reverse=True)
         ranked_dict[key] = sorted_documents
     return ranked_dict

@@ -4,7 +4,9 @@ import re
 from app.irsystem.controllers.cosine_search import *
 from data.body_part_synonyms import synonyms
 
-strip_set = lambda x : {ele.strip() for ele in x}
+
+def strip_set(x): return {ele.strip() for ele in x}
+
 
 def clean_up(s):
 	q_lower = s.lower()
@@ -14,7 +16,8 @@ def clean_up(s):
 	
 	return list(strip_set(q_body_parts))
 
-def boolean_search(data, query):
+
+def boolean_search(data, query, additional_query):
 	"""
 	Given a query, return the stretches that work on each body part
 	"""
@@ -47,7 +50,7 @@ def boolean_search(data, query):
 		del return_dict[key]
 
 	if len(return_dict) == 1:
-		return boolean_cossim(return_dict)
+		return boolean_cossim(return_dict, additional_query)
 
 	deduped_return_dict = {}
 	for combo in list(itertools.combinations(return_dict, 2)):
@@ -97,4 +100,4 @@ def boolean_search(data, query):
 	for key in rm_dict:
 		deduped_return_dict[key] = []
     
-	return boolean_cossim(deduped_return_dict)
+	return boolean_cossim(deduped_return_dict, additional_query)

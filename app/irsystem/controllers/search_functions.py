@@ -2,6 +2,7 @@ import json
 import itertools
 import re
 from app.irsystem.controllers.cosine_search import *
+from data.body_part_synonyms import synonyms
 
 strip_set = lambda x : {ele.strip() for ele in x}
 
@@ -27,10 +28,12 @@ def boolean_search(data, query):
 		for combo in combos:
 			combo_set = strip_set(set(combo))
 			combo_string = ', '.join(combo_set)
+			if combo_string in synonyms:
+				combo_set = set(combo_set.union(synonyms[combo_string]))
 			return_dict[combo_string] = []
 			for stretch in data:
 				c_body_parts = set(data[stretch]["body_part"])
-				if set(combo_set).issubset(c_body_parts):
+				if len(set(combo_set).intersection(c_body_parts)) != 0:
 					return_dict[combo_string].append((stretch, data[stretch]["url"], \
 						data[stretch]["image_name"], ' '.join(data[stretch]["description"])))
 

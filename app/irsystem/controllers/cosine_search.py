@@ -5,8 +5,12 @@ import scipy.sparse
 from sklearn.decomposition import TruncatedSVD
 import pickle
 from app.irsystem.controllers.rocchio import *
+from app.irsystem.controllers.social import social_sort
 
 c_SPACE = " "
+
+
+USE_SOCIAL = True
 
 
 def get_sim(query, input_doc_mat):
@@ -161,7 +165,7 @@ def query_descr_cossim(query_weights, description):
     return cossim
 
 
-def boolean_cossim(dictionary, additional_query):
+def boolean_cossim(dictionary, additional_query, use_social_rank=USE_SOCIAL):
     """
     [boolean_cossim(dictionary)] is the ranking using cosine similarity
     for all the returned documents in the dictionary
@@ -169,6 +173,8 @@ def boolean_cossim(dictionary, additional_query):
     [dictionary] is the dict all the returned documents found from the boolean search
 
     [additional_query] is the additional side query where more information can be added
+
+    The key is a four tuple: (stretch name, url, image, description string)
     """
     ranked_dict = dict()
     for key in dictionary:
@@ -189,6 +195,10 @@ def boolean_cossim(dictionary, additional_query):
             reverse=True)
 
         ranked_dict[key] = sorted_documents
+
+    if use_social_rank:
+        ranked_dict = social_sort(ranked_dict)
+
     return ranked_dict
 
 

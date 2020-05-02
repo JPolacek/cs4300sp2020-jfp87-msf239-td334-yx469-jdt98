@@ -51,7 +51,11 @@ def add_relevant(boolean_query, pose_name, db_directory_path=DATABASE_PATH):
     database = pickle.load(f)
     f.close()
 
-    database['relevant'][boolean_query.lower().strip()] += pose_name
+    current_list = database['relevant'][boolean_query.lower().strip()]
+    current_set = set(current_list)
+    current_set.add(pose_name)
+    current_list = list(current_set)
+    database['relevant'][boolean_query.lower().strip()] = current_list
 
     f = open(db_directory_path, "wb")
     pickle.dump(database, f)
@@ -89,7 +93,11 @@ def add_irrelevant(boolean_query, pose_name, db_directory_path=DATABASE_PATH):
     database = pickle.load(f)
     f.close()
 
-    database['irrelevant'][boolean_query.lower().strip()] += pose_name
+    current_list = database['irrelevant'][boolean_query.lower().strip()]
+    current_set = set(current_list)
+    current_set.add(pose_name)
+    current_list = list(current_set)
+    database['irrelevant'][boolean_query.lower().strip()] = current_list
 
     f = open(db_directory_path, "wb")
     pickle.dump(database, f)
@@ -300,7 +308,6 @@ WARNING: Default rocchip weights are a = 1, b = 0.8 and c = 0.1 as suggested onl
     rocchio = rocchio[0]  # rocchipo array was inside another array
 
     if clip:
-        print(rocchio)
         rocchio = np.array([(x if x > 0 else 0) for x in rocchio])
 
     return rocchio

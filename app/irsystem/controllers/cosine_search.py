@@ -181,7 +181,7 @@ def pickle_data():
     Pickles the data for easy accessibility and so that no recomputation is needed
 
     WARNING
-    REQUIRES: Call picke_data() every single time the data set is updated!!!!
+    REQUIRES: Call pickle_data() every single time the data set is updated!!!!
     """
     stretch_list = description_yoga_to_list(
         "../../../data/description_yoga_json.json")
@@ -209,5 +209,8 @@ def pickle_data():
     file_doc_to_index = open("../../../data/doc_to_index", "wb")
     pickle.dump(doc_to_index, file_doc_to_index)
 
+    pickle_pose_name()  # in rocchio
 
+# LEAVE UNCOMMENTED! IF THE DATA SET CHANGES IN ANY WAY, UNCOMMENT AND CALL
 # pickle_data()
+

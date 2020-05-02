@@ -2,10 +2,12 @@ import pickle
 from sklearn import preprocessing
 import numpy as np
 
+
 def get_recom(userinput):
 
     loadmodel = pickle.load(open('model.sav', 'rb'))
-    index_list = ['abs', 'ankles', 'arms', 'back', 'belly', 'bladder', 'brain', 'chest','feet', 'hamstrings', 'hands', 'heart', 'hips', 'knees', 'legs', 'liver', 'lower back', 'lungs', 'neck', 'pelvis', 'shoulders', 'spine', 'thighs', 'thyroid']
+    index_list = ['abs', 'ankles', 'arms', 'back', 'belly', 'bladder', 'brain', 'chest', 'feet', 'hamstrings', 'hands', 'heart',
+                  'hips', 'knees', 'legs', 'liver', 'lower back', 'lungs', 'neck', 'pelvis', 'shoulders', 'spine', 'thighs', 'thyroid']
     le = preprocessing.LabelEncoder()
     le.fit(index_list)
     numinput = le.transform([userinput])
@@ -15,4 +17,23 @@ def get_recom(userinput):
 
     return result
 
-#Put user's previous input in this function, it would return the recommendation which this user would also like to search.
+# Put user's previous input in this function, it would return the recommendation which this user would also like to search.
+
+
+def get_routine(user_input, n_recs):
+    """
+    get_routine(user_input, n_recs) gives up to n different recommendations 
+    given an initial user input for a stretch
+
+    Returns: [List] of at most n different recommendations , at least one different 
+    recommendation
+
+    Requires: n_recs >= 1
+    """
+    _input = user_input
+    recs = set()
+    for _ in range(n_recs):
+        recommendation = get_recom(_input)
+        _input = recommendation
+        recs.add(recommendation)
+    return list(recs)

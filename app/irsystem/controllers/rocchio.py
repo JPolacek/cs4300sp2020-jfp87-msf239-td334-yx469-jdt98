@@ -5,6 +5,7 @@ from collections import Counter
 import json
 from sklearn.feature_extraction.text import TfidfVectorizer
 import scipy.sparse
+from collections import defaultdict
 
 # This module implements a simple rocchio that takes in user input
 # and helps update the rankings
@@ -16,10 +17,16 @@ import scipy.sparse
 # a SQL database, etc, anything that can be queried fast and reliablys
 
 
-def add_relevant(database, boolean_query, pose_name):
+DATABASE_PATH = "data/rocchio_database"
+
+
+def add_relevant(boolean_query, pose_name, db_directory_path=DATABASE_PATH):
     """
     add_relevant(database, boolean_query,pose_name) adds the contents of the entire document to
     the database if it is relevant to the boolean_query.
+    Reads and writes back to the database path
+
+    db_directory_path is the path to the database
 
     Example: user finds D1 : "extend arm up and down..." relevant to the boolean_query "neck and back".
     Calling add_relevant will add this pose_name D1 as relevant to the boolean_query
@@ -31,16 +38,33 @@ def add_relevant(database, boolean_query, pose_name):
     from the reelvant list
 
     REQUIRES: 'Irrelevant and Relevatn' fields in database
+    REQUIRES: Database already exists
+
+    REQUIRES
+    At root, always contains 2 keys: "relevant" and "irrelevant"
+    Cannot have more or less than these keys
 
     Returns: NONE
     """
-    database['relevant'][boolean_query] += pose_name
+
+    f = open(db_directory_path, "rb")
+    database = pickle.load(f)
+    f.close()
+
+    database['relevant'][boolean_query.lower().strip()] += pose_name
+
+    f = open(db_directory_path, "wb")
+    pickle.dump(database, f)
+    f.close()
 
 
-def add_irrelevant(database, boolean_query, pose_name):
+def add_irrelevant(boolean_query, pose_name, db_directory_path=DATABASE_PATH):
     """
     add_irrelevant(database, boolean_query, pose_name) adds the contents of the entire document to
     the database if it is irrelevant to the boolean_query.
+    Reads and writes back to the database path
+
+    db_directory_path is the path to the database
 
     Example: user finds D1 : "swing feet left and right..." irrelevant to the boolean_query "neck and back".
     Calling add_irrelevant will add this pose_name D1 as irrelevant to the boolean_query
@@ -52,15 +76,32 @@ def add_irrelevant(database, boolean_query, pose_name):
     from the irrelvant list
 
     REQUIRES: 'Irrelevant and Relevatn' fields in database
+    REQUIRES: Database already exists
+
+    REQUIRES
+    At root, always contains 2 keys: "relevant" and "irrelevant"
+    Cannot have more or less than these keys
 
     Returns: NONE
     """
-    database['irrelevant'][boolean_query] += pose_name
+
+    f = open(db_directory_path, "rb")
+    database = pickle.load(f)
+    f.close()
+
+    database['irrelevant'][boolean_query.lower().strip()] += pose_name
+
+    f = open(db_directory_path, "wb")
+    pickle.dump(database, f)
+    f.close()
 
 
-def clear_database(database):
+def clear_database(db_directory_path=DATABASE_PATH):
     """
     clear_database(database) clears all relevant adn irrelevant fields in the database.
+    Reads and writes back to the database path
+
+    db_directory_path is the path to the database
 
     Example: User has given misleading or faulty data on relevance and irrelevance.
     Use clear_database to clear out all rankings to restart without rocchio.
@@ -69,58 +110,88 @@ def clear_database(database):
     is lost permanently
 
     REQUIRES: 'Irrelevant and Relevatn' fields in database
+    REQUIRES: Database already exists
+
+    REQUIRES
+    At root, always contains 2 keys: "relevant" and "irrelevant"
+    Cannot have more or less than these keys
 
     Returns: NONE
     """
-    database['relevant'] = dict()
-    database['irrelevant'] = dict()
+    f = open(db_directory_path, "rb")
+    database = pickle.load(f)
+    f.close()
+
+    database['relevant'] = defaultdict(list)
+    database['irrelevant'] = defaultdict(list)
+
+    f = open(db_directory_path, "wb")
+    pickle.dump(database, f)
+    f.close()
 
 
-def init_database():
+def init_database(db_directory_path=DATABASE_PATH):
     """
     init_database() creates a new data base with empty dictionaries
     for the relevant and irrelevant fields.
 
-    Returns: [dictionary] of data base with empty irrelevant and relevant fields
+    At root, always contains 2 keys: "relevant" and "irrelevant"
+    Cannot have more or less than these keys
+
+    Writes the database into specified [db_directory_path]. This path
+    is relative to the top of the github repo, and is to be located in
+    the "data" folder
+
+    Returns: None
     """
     database = dict()
-    database['relevant'] = dict()
-    database['irrelevant'] = dict()
-    return database
+    database['relevant'] = defaultdict(list)
+    database['irrelevant'] = defaultdict(list)
+
+    f = open(db_directory_path, "wb")
+    pickle.dump(database, f)
+    f.close()
 
 
-def rocchio(database, boolean_query, cosine_query):
+def rocchio(boolean_query, cosine_query, db_directory_path=DATABASE_PATH):
     """
-    rocchio(database, boolean_query, cosine_query) takes in the boolean query
+    rocchio(boolean_query, cosine_query, db_directory_path) takes in the boolean query
     the cosine query and the irrelevant and relevant docus in the database
     and updates the cosine query.
 
     Boolean_query is a [string]
     Cosine_query is a [string]
-    Database is a [dictionary]
+    db_directory_path is a path to the rocchio database
 
-    Returns: [string] of the rocchio updated cosine query
+    Returns: [Numpy Array] of weights corresponding to the updated query
 
     Requires: Cosine similarity MUST be used after this: This query correction
     does not fix up for cosine similarity or tf-idf, so you cannot assume Cosine
     similarity is done at the same time or before rocchio()
-
-    Warning: SIMPLE TOKENIZER used: I use split() as a tokenizer
     """
+
+    # get the database
+    f = open(db_directory_path, "rb")
+    database = pickle.load(f)
+    f.close()
+
+    # get relevant documents to the query
     relevant = []
     if boolean_query in database['relevant']:
-        relevant = database['relevant'][boolean_query]
+        relevant = database['relevant'][boolean_query.lower().strip()]
+
+    # get irrelevant documents to the query
     irrelevant = []
     if boolean_query in database['irrelevant']:
-        irrelevant = database['irrelevant'][boolean_query]
-    tokenized_cosine_query = cosine_query.split()
-    return simple_rocchio_helper(tokenized_cosine_query, relevant, irrelevant)
+        irrelevant = database['irrelevant'][boolean_query.lower().strip()]
+
+    return rocchio_helper(cosine_query, relevant, irrelevant)
 
 
 def simple_rocchio_helper(cosine_query, relevant, irrelevant):
     """Returns a string representing the modified cosine query.
 
-    [DEPRECATED]
+    [DEPRECATED] [DO NOT USE!]
 
     WARNING: assumes that the relevant and irrelevant documents were tokenized
 
@@ -141,6 +212,7 @@ def simple_rocchio_helper(cosine_query, relevant, irrelevant):
     """
 
     print("WARNING: DEPRECATED")
+    print("DO NOT USE!")
 
     rel_multi_set = Counter()
     for doc in relevant:
@@ -158,25 +230,27 @@ def simple_rocchio_helper(cosine_query, relevant, irrelevant):
     return rocchio_query
 
 
-def rocchio_helper(query, relevant, irrelevant, a=.3, b=.3, c=.8, clip=True):
-        """Returns a vector representing the modified query vector.
+def rocchio_helper(query, relevant, irrelevant, a=1, b=.8, c=.1, clip=True):
+    """Returns a vector representing the modified query vector.
 
-    Note:
-        If the `clip` parameter is set to True, the resulting vector should have
-        no negatve weights in it!
+Note:
+    If the `clip` parameter is set to True, the resulting vector should have
+    no negatve weights in it!
 
-        Also, be sure to handle the cases where relevant and irrelevant are empty lists.
+    Also, be sure to handle the cases where relevant and irrelevant are empty lists.
 
-    Params: {query: String (the name of the movie being queried for),
-             relevant: List (the names of relevant movies for query),
-             irrelevant: List (the names of irrelevant movies for query),
-             input_doc_matrix: Numpy Array Uses tf_idf_matrix,
-             indexer: Dict: uses  pose_name_to_index,
-             a,b,c: floats (weighting of the original query, relevant queries,
-                             and irrelevant queries, respectively),
-             clip: Boolean (whether or not to clip all returned negative values to 0)}
-    Returns: Numpy Array
-    """
+Params: {query: String (the name of the movie being queried for),
+         relevant: List (the names of relevant movies for query),
+         irrelevant: List (the names of irrelevant movies for query),
+         input_doc_matrix: Numpy Array Uses tf_idf_matrix,
+         indexer: Dict: uses  pose_name_to_index,
+         a,b,c: floats (weighting of the original query, relevant queries,
+                         and irrelevant queries, respectively),
+         clip: Boolean (whether or not to clip all returned negative values to 0)}
+Returns: Numpy Array
+
+WARNING: Default rocchip weights are a = 1, b = 0.8 and c = 0.1 as suggested online
+"""
 
     # get tf-idf matrix
     f = open("data/tf_idf_matrix", "rb")
@@ -223,8 +297,11 @@ def rocchio_helper(query, relevant, irrelevant, a=.3, b=.3, c=.8, clip=True):
     rocchio = a * q0 + b * 1/l_relevant * \
         sum_relevant - c * 1/l_irrelevant * sum_irrelevant
 
+    rocchio = rocchio[0]  # rocchipo array was inside another array
+
     if clip:
-        rocchio = np.array([x if x > 0 else 0 for x in rocchio])
+        print(rocchio)
+        rocchio = np.array([(x if x > 0 else 0) for x in rocchio])
 
     return rocchio
 
@@ -256,5 +333,10 @@ def pickle_pose_name():
     pickle.dump(pose_name_to_index, file_doc_to_index)
 
 
-# LEAVE UNCOMMENTED! IF THE DATA SET CHANGES IN ANY WAY, UNCOMMENT AND CALL
+# LEAVE UNCOMMENTED! IF THE DATA SET CHANGES IN ANY WAY, UNCOMMENT AND CALL LOCALLY
+# FROM THIS DIRECTORY
 # pickle_pose_name()
+
+# LEAVE UNCOMMENTED! IF THE DATA SET CHANGES IN ANY WAY, UNCOMMENT AND CALL LOCALLY
+# FROM THIS DIRECTORY
+# init_database("../../../data/rocchio_database")

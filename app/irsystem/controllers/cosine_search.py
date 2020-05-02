@@ -80,12 +80,27 @@ def build_vectorizer(max_features, stop_words, max_df=0.8, min_df=2, norm='l2', 
 
 def body_description_cossim(body_part, description):
     """
+    [DEPRECATED] [DO NOT USE!]
+
     body_description_cossim finds the cosine similarity between the body part and
     description
 
+    [body_part] is a [string] corresponding to the query of the body part, with additional
+    query information appended to the string
+
+    [description] is a [string] containing a description of the pose
+
     Requires: Description is in the file pointed to by
     ["../../../data/description_yoga_json.json"]
+
+    Example usage:
+    # print(body_description_cossim("knees",
+# "Kneel face down with your knees and toes facing out. Lean forward and let your knees move outwards."))
+
     """
+
+    print("WARNING: DEPRECATED")
+    print("DO NOT USE!")
 
     file_stretch_list = open(
         "data/stretch_descriptions_list", "rb")
@@ -114,16 +129,47 @@ def body_description_cossim(body_part, description):
     return cossim
 
 
-# print(body_description_cossim("knees",
-#                               "Kneel face down with your knees and toes facing out. Lean forward and let your knees move outwards."))
+def query_descr_cossim(query_weights, description):
+    """
+    query_descr_cossim(query_weights, description)
+
+    [query_weights] is a [numpy array] corresponding to the tf-idf weighted
+    query of the body part, with additional
+    query information appended to the string. This can be either from rocchio,
+    or just a weight converted version of the query
+
+    [description] is a [string] containing a description of the pose
+
+    Requires: Description is in the file pointed to by
+    ["../../../data/description_yoga_json.json"]
+    """
+
+    file_tf_idf_matrix = open("data/tf_idf_matrix", "rb")
+    stretches_tf_idf = pickle.load(file_tf_idf_matrix)
+
+    file_doc_to_index = open("data/doc_to_index", "rb")
+    doc_to_index = pickle.load(file_doc_to_index)
+
+    # index of where the description lies in the TF_IDF array
+    description_idx = doc_to_index[description]
+
+    # get tf-idf weightins for descritpion
+    description_fit = stretches_tf_idf[description_idx, :]
+
+    # Cosine similarity between body and descritipion
+    cossim = np.dot(query_weights, description_fit)
+    return cossim
 
 
 def boolean_cossim(dictionary, additional_query):
     """
     [boolean_cossim(dictionary)] is the ranking using cosine similarity
     for all the returned documents in the dictionary
+
+    [dictionary] is the dict all the returned documents found from the boolean search
+
+    [additional_query] is the additional side query where more information can be added
     """
-    db = init_database()  # NEED TO MAKE THIS PERSISTANT
     ranked_dict = dict()
     for key in dictionary:
         document_list = dictionary[key]
@@ -133,10 +179,15 @@ def boolean_cossim(dictionary, additional_query):
             # key=lambda tup: body_description_cossim(
             #     (key + " " + additional_query).strip(), tup[-1]),
             # reverse=True)
-            key=lambda tup: body_description_cossim(
-                rocchio(db, key, (key + " " + additional_query).strip()),
-                tup[-1]),
+            # 5/2 call was
+            # key=lambda tup: body_description_cossim(
+            #     rocchio(db, key, (key + " " + additional_query).strip()),
+            #     tup[-1]),
+            # reverse=True)
+            key=lambda tup: query_descr_cossim(
+                rocchio(key, (key + " " + additional_query).strip()), tup[-1]),
             reverse=True)
+
         ranked_dict[key] = sorted_documents
     return ranked_dict
 
@@ -213,4 +264,3 @@ def pickle_data():
 
 # LEAVE UNCOMMENTED! IF THE DATA SET CHANGES IN ANY WAY, UNCOMMENT AND CALL
 # pickle_data()
-

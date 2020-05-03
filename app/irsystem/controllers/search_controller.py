@@ -37,6 +37,7 @@ def search():
             additional_query = ""
     else:
         query = request.args.get('search')
+    
 
     no_result_text = ''
     keys_to_remove = []

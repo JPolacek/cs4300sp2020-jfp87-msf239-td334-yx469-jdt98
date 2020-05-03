@@ -35,7 +35,9 @@
             <input id="input2" type="text" name="search" class="form-control"
                 placeholder="other requests: easy, no equipment">
         </div>
+
         <button type="submit" class="btn btn-info"> Go! </button>
+
         <br>
 
         <h3 style="font-size: 15px; font-family:Gill Sans; color: grey">
@@ -64,14 +66,24 @@
         </div>
         {% endif %}
 
-        <!-- Print out suggested routine given the search -->
+        <!-- Print out menu of bp sections and suggested routine given the search -->
         <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
             <br>
+            <i> Go to relevant poses for:
+                {% for k in data %}
+                &nbsp; <a href="#{{k}}_section">{{k}}</a>
+                {% endfor %}
+            </i>
+
+            <br><br>
             {% if routine_exists %}
             <i>Here is a suggested routine given your search: <br>
 
                 {% for i, r in routine %}
-                <li> <b> {{r}} </b></li>
+                <li>
+                    <b> <a href="#{{r}}_section"> {{r}}</a> </b>
+
+                </li>
                 {% endfor %}
 
             </i>
@@ -89,13 +101,15 @@
         <!-- Print out all of the poses that were successfully found -->
         <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
             <br>
-            <b>{{k}}</b>
+            <h3 id="{{k}}_section">
+                <b style="font-size:30px">{{k}}</b>
+            </h3>
             <div
                 style="padding-left:0; text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110); padding-left: 14%; padding-right: 14%;">
                 <table>
                     {% for pose, url, img, video, description in data[k] %}
                     <tr>
-                        <td class="pose_entry"><a href={{url}}>{{pose}}</a></td>
+                        <td class="pose_entry" id="{{pose}}_section"><a href={{url}}>{{pose}}</a></td>
                         <td class="img_entry"><img src=static/yoga_journal_images/{{img}}> </td> <td class="img_entry">
                             <iframe width="420" height="315" src=https://www.youtube.com/embed/{{video}}> </iframe>
                                 </td> <td class="desc_entry">

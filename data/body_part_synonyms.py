@@ -20,8 +20,10 @@ synonyms = {'lower back': ['back', 'spine', 'abs'], \
 	'legs': ['adductors', 'abductors', 'shins', 'feet', 'quads', 'feet', 'toes', 'glutes', 'knees', 'achilles', 'calves', 'hamstrings', 'thighs'], \
 	'lower-back': ['sides', 'liver', 'bladder', 'abs', 'abductors'], \
 	'feet': ['toes', 'ankles'], \
+	'foot': ['feet'], \
 	'quads': ['thighs'], \
 	'buttocks': ['glutes'], \
+	'ankles': ['feet'], \
 	'chest': ['lungs', 'thyroid', 'heart'], \
 	'adductors': ['hips', 'pelvis'], \
 	'abs': ['sides', 'stomach', 'belly'], \

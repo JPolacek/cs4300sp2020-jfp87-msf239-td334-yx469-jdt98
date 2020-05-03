@@ -39,7 +39,9 @@ def boolean_search(data, query, additional_query):
                 c_body_parts = set(data[stretch]["body_part"])
                 if len(set(combo_set).intersection(c_body_parts)) != 0:
                     return_dict[combo_string].append((stretch, data[stretch]["url"],
-                                                      data[stretch]["image_name"], ' '.join(data[stretch]["description"])))
+                                                      data[stretch]["image_name"],
+                                                      data[stretch]["video_url"],
+                                                      ' '.join(data[stretch]["description"])))
 
     rm_dict = []
     for key in return_dict:

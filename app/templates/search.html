@@ -32,13 +32,33 @@
                 placeholder="body part(s) to target: neck and back">
         </div>
         <div class="form-group">
-            <input id="input2" type="text" name="search" class="form-control"
+            <input id="input2" type="text" name="additional" class="form-control"
                 placeholder="other requests: easy, no equipment">
         </div>
+
+
+
+
+
 
         <button type="submit" class="btn btn-info"> Go! </button>
 
         <br>
+        <p>Optional Parameters for Query</p>
+        <br>
+
+        <select name="difficulty" id="input_difficulty">
+            <option value="Any" selected disabled hidden>
+                Select a Difficulty
+            </option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate </option>
+            <option value="Advanced">Advanced</option>
+            <option value="Any">Any Level</option>
+        </select>
+
+        <br>
+
 
         <h3 style="font-size: 15px; font-family:Gill Sans; color: grey">
             jfp87, msf239, td334, yx469, jdt98
@@ -122,11 +142,13 @@
                 <table>
                     {% for pose, url, img, video, description in data[k] %}
                     <tr>
-                        <td class="pose_entry" id="{{pose}}_section"><a href={{url}}>{{pose}}</a></td>
-                        <td class="img_entry"><img src=static/yoga_journal_images/{{img}}> </td> <td class="img_entry">
+                        <td class="pose_entry"><a href={{url}}>{{pose}}</a></td>
+                        <td class="img_entry"><img src=static/yoga_journal_images/{{img}}> </td>
+                        <td class="img_entry">
                             <iframe width="420" height="315" src=https://www.youtube.com/embed/{{video}}> </iframe>
-                                </td> <td class="desc_entry">
-                                <p>{{description}}</p>
+                        </td>
+                        <td class="desc_entry">
+                            <p>{{description}}</p>
                         </td>
                     </tr>
                     {% endfor %}

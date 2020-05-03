@@ -6,6 +6,7 @@ import json
 import re
 from app.irsystem.controllers.edit_distance import *
 from app.irsystem.controllers.search_functions import *
+import copy
 
 project_name = "Stretches: Find a stretch to help your pain"
 net_id = "Jake Polacek:jfp87 Jonathan Tran:jdt98 Matt Frucht:msf239 Teresa Datta:td334 Yifan Xu:yx469"
@@ -13,7 +14,7 @@ data = ''
 valid_query_invalid_bp = "We're uncertain what body part you're looking for, your query doesn't make sense."
 
 with open('data/description_yoga_json.json') as f:
-    data = json.load(f)
+    original_data = json.load(f)
 
 
 def find_similar_query(query, query_list):
@@ -24,20 +25,64 @@ def find_similar_query(query, query_list):
     return edit_distance_search(query, list(set(all_body_parts)))
 
 
+def difficulty_to_level(difficulty):
+    if difficulty == "Beginner":
+        return 1
+    if difficulty == "Intermediate":
+        return 2
+    if difficulty == "Advanced":
+        return 3
+    return 0
+
+
+def filter_data_based_on_difficulty(difficulty, original_data):
+    if difficulty == 0:
+        return copy.deepcopy(original_data)
+    new_data = dict()
+    for pose in original_data:
+        if original_data[pose]["difficulty"] == difficulty:
+            new_data[pose] = copy.deepcopy(original_data[pose])
+    return new_data
+
+
 @irsystem.route('/', methods=['GET'])
 def search():
 
     query_dict = dict(request.args.lists())
-    if 'search' in query_dict:
+
+    # if 'search' in query_dict:
+    #     search_items = query_dict['search']
+    #     query = search_items[0]
+    #     if (len(search_items) == 2):
+    #         additional_query = search_items[1]
+    #     else:
+    #         additional_query = ""
+    # else:
+    #     query = request.args.get('search')
+
+    if "search" in query_dict:
         search_items = query_dict['search']
         query = search_items[0]
-        if (len(search_items) == 2):
-            additional_query = search_items[1]
-        else:
-            additional_query = ""
     else:
         query = request.args.get('search')
-    
+
+    if "additional" in query_dict:
+        additional_query = query_dict['additional']
+        additional_query = additional_query[0]
+    else:
+        additional_query = ""
+
+    if "difficulty" in query_dict:
+        difficulty = query_dict['difficulty']
+        difficulty = difficulty[0]
+        difficulty = difficulty_to_level(difficulty)
+
+        data = filter_data_based_on_difficulty(difficulty, original_data)
+
+    else:
+        difficulty = 0
+        data = original_data
+
 
     no_result_text = ''
     keys_to_remove = []

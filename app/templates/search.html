@@ -63,6 +63,24 @@
             </div>
         </div>
         {% endif %}
+
+        <!-- Print out suggested routine given the search -->
+        <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
+            <br>
+            {% if routine_exists %}
+            <i>Here is a suggested routine given your search: <br>
+                {% for i, r in routine %}
+                {{r}}<i> &emsp; </i>
+                {% endfor %}</i>
+            {% endif %}
+            {% if not routine_exists %}
+            <i>No routine could be generated. Sorry :(</i>
+            {% endif %}
+            <br>
+        </div>
+
+
+
         {% for k in data %}
         <!-- Print out all of the poses that were successfully found -->
         <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
@@ -75,11 +93,13 @@
                     <tr>
                         <td class="pose_entry"><a href={{url}}>{{pose}}</a></td>
                         <td class="img_entry"><img src=static/yoga_journal_images/{{img}}></td>
-                        <td class="desc_entry"><p>{{description}}</p></td>
+                        <td class="desc_entry">
+                            <p>{{description}}</p>
+                        </td>
                     </tr>
                     {% endfor %}
-                    </table>
-                
+                </table>
+
             </div>
         </div>
         {% endfor %}

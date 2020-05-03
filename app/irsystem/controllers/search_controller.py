@@ -44,9 +44,12 @@ def search():
     typos = False
     no_known_typos = False
 
+    suggested_routine = []
+
     bs = {}
     if query:
-        bs = boolean_search(data, query, additional_query)
+        bs, suggested_routine = boolean_search_routine(
+            data, query, additional_query)
         keys_to_remove = [key for key in bs if bs[key] == []]
         for term in clean_up(query):
             if term not in keys_to_remove and term not in bs.keys():
@@ -74,6 +77,12 @@ def search():
         output_message = "Your search: " + query
         import_data = bs
 
+    enumerate_routine = enumerate(suggested_routine)
+
+    routine_non_empty = True
+    if suggested_routine == []:
+        routine_non_empty = False
+
     return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
                            success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
-                           no_known_typos=no_known_typos)
+                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty)

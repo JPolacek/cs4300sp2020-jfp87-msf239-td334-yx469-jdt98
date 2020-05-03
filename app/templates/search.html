@@ -66,12 +66,25 @@
         </div>
         {% endif %}
 
+        <script>
+            // add scrolling to view functionality
+            function goTo(name) {
+                var id = String(name) + "_section";
+                console.log(id);
+                var element = document.getElementById(id);
+                console.log(element);
+                element.scrollIntoView(true);
+                // (document.getElementById("{{k}}_section")).scrollIntoView(true);
+            }
+
+        </script>
+
         <!-- Print out menu of bp sections and suggested routine given the search -->
         <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
             <br>
             <i> Go to relevant poses for:
                 {% for k in data %}
-                &nbsp; <a href="#{{k}}_section">{{k}}</a>
+                &nbsp; <a onclick="(document.getElementById('{{k}}_section')).scrollIntoView(true)">{{k}}</a>
                 {% endfor %}
             </i>
 
@@ -81,7 +94,7 @@
 
                 {% for i, r in routine %}
                 <li>
-                    <b> <a href="#{{r}}_section"> {{r}}</a> </b>
+                    <b> <a onclick="(document.getElementById('{{r}}_section')).scrollIntoView(true)"> {{r}}</a> </b>
 
                 </li>
                 {% endfor %}

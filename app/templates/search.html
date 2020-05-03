@@ -69,9 +69,13 @@
             <br>
             {% if routine_exists %}
             <i>Here is a suggested routine given your search: <br>
+
                 {% for i, r in routine %}
-                {{r}}<i> &emsp; </i>
-                {% endfor %}</i>
+                <li> <b> {{r}} </b></li>
+                {% endfor %}
+
+            </i>
+
             {% endif %}
             {% if not routine_exists %}
             <i>No routine could be generated. Sorry :(</i>
@@ -92,12 +96,10 @@
                     {% for pose, url, img, video, description in data[k] %}
                     <tr>
                         <td class="pose_entry"><a href={{url}}>{{pose}}</a></td>
-                        <td class="img_entry"><img src=static/yoga_journal_images/{{img}}></td>
-                        <td class="img_entry">
-                            <iframe width="420" height="315" src=https://www.youtube.com/embed/{{video}}>
-                            </iframe></td>
-                        <td class="desc_entry">
-                            <p>{{description}}</p>
+                        <td class="img_entry"><img src=static/yoga_journal_images/{{img}}> </td> <td class="img_entry">
+                            <iframe width="420" height="315" src=https://www.youtube.com/embed/{{video}}> </iframe>
+                                </td> <td class="desc_entry">
+                                <p>{{description}}</p>
                         </td>
                     </tr>
                     {% endfor %}

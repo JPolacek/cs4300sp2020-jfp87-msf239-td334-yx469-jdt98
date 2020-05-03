@@ -101,7 +101,7 @@ def boolean_search(data, query, additional_query):
             deduped_return_dict[b] = b_list
 
     for key in rm_dict:
-        deduped_return_dict[key] = []
+        deduped_return_dict[key] = [] 
 
     return boolean_cossim(deduped_return_dict, additional_query)
 

@@ -49,6 +49,9 @@ def social_sort(dictionary, top_n=5):
         # rejoin lists
         full_list = sorted_list + not_sort_list
 
+        #limit to 10 search results per pose
+        full_list = full_list[:10]
+ 
         ranked_dict[key] = full_list
 
     return ranked_dict

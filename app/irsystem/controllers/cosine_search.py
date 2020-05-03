@@ -10,7 +10,7 @@ from app.irsystem.controllers.social import social_sort
 c_SPACE = " "
 
 
-USE_SOCIAL = True
+USE_SOCIAL = True 
 
 
 def get_sim(query, input_doc_mat):

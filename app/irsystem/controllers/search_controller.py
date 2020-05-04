@@ -227,7 +227,7 @@ def search():
     else:
         output_message = "Your search: " + query + " " + \
             "[" + level_to_difficulty(difficulty) + "]"
-        import_data = bs
+        import_data = {stretch_tup[0] : stretch_tup[1] for stretch_tup in sorted(bs.items(), key=lambda tup : len(tup[0]), reverse=True)}
 
     enumerate_routine = enumerate(suggested_routine)
 

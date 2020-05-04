@@ -49,14 +49,17 @@ def social_sort(dictionary, top_n=5):
             to_sort_list = document_list[:top_n]
             not_sort_list = document_list[top_n:]
         
-        # gather the trending info (i.e. how often it's mentioned) from Google Trends 
+        # gather the trending info (i.e. how often it's mentioned) from Google Trends
         kw_list = [stretch[0] for stretch in to_sort_list]
-        pytrend.build_payload(kw_list=kw_list)
-        df = pytrend.interest_over_time()
-        df_sum = df.sum()
-        trending_dict = {stretch : df_sum.get(stretch) for stretch in kw_list}
-        sorted_trending = {s[0] : s[1] for s in 
-            sorted(trending_dict.items(), key=lambda x:x[1], reverse=True)}
+        try:
+            pytrend.build_payload(kw_list=kw_list)
+            df = pytrend.interest_over_time()
+            df_sum = df.sum()
+            trending_dict = {stretch : df_sum.get(stretch) for stretch in kw_list}
+            sorted_trending = {s[0] : s[1] for s in 
+                sorted(trending_dict.items(), key=lambda x:x[1], reverse=True)}
+        except:
+            sorted_trending = {stretch : 0 for stretch in kw_list}
 
         # sort the top_n documents by their reddit popularity
         sorted_list = sorted(

@@ -209,7 +209,7 @@ def search():
         pose = None
 
     if pose != None:
-        print("hi")
+        pose = ' '.join([w[0].capitalize() + w[1:] for w in pose.split(' ')])
         return search_by_pose(pose, additional_query, difficulty)
 
     no_result_text = ''

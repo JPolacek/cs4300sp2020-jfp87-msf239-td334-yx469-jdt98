@@ -134,8 +134,8 @@
 
                 {% for i, r in routine %}
                 <li>
-                    <b> <a onclick="(document.getElementById('{{r}}_section')).scrollIntoView(true)"> {{r}}</a> </b>
-
+                    <!-- <b> <a onclick="(document.getElementById('{{r}}_section')).scrollIntoView(true)"> {{r}}</a> </b> -->
+                    <b> <a href={{r.replace(" ", "&")}} name={{r}}>{{r}}</a> </b>
                 </li>
                 {% endfor %}
 

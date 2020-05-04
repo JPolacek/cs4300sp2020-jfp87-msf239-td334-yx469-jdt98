@@ -7,6 +7,7 @@ import re
 from app.irsystem.controllers.edit_distance import *
 from app.irsystem.controllers.search_functions import *
 import copy
+from app.irsystem.controllers.pose_search import *
 
 project_name = "Stretches: Find a stretch to help your pain"
 net_id = "Jake Polacek:jfp87 Jonathan Tran:jdt98 Matt Frucht:msf239 Teresa Datta:td334 Yifan Xu:yx469"
@@ -53,6 +54,36 @@ def filter_data_based_on_difficulty(difficulty, original_data):
         if original_data[pose]["difficulty"] == difficulty:
             new_data[pose] = copy.deepcopy(original_data[pose])
     return new_data
+
+
+@irsystem.route('/<pose>', methods=['GET'])
+def re_search(pose):
+    pose = pose.replace("&", " ")
+    no_result_text = ''
+    potential_typos = []
+    typos = False
+    no_known_typos = False
+
+    suggested_routine = []
+
+    bs, suggested_routine = pose_search(original_data, pose, "")
+
+    if len(bs) == 0:
+
+        output_message = no_result_text
+    else:
+        output_message = "Your search: " + pose + " "
+        import_data = bs
+
+    enumerate_routine = enumerate(suggested_routine)
+
+    routine_non_empty = True
+    if suggested_routine == []:
+        routine_non_empty = False
+
+    return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
+                           success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
+                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty)
 
 
 @irsystem.route('/', methods=['GET'])

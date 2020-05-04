@@ -6,7 +6,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
 </head>
 
-<body style="background-color: rgb(255, 244, 227)">
+<body id="body_search" style="background-color: rgb(255, 244, 227)">
     <div class=" topcorner">
         <!--<p>Project Name: {{ name }}</p>-->
         <h3 style="font-size: 15px; font-family:Gill Sans; color: grey">
@@ -183,6 +183,7 @@
                             <i>Search for more related poses!</i>
                             <br>
                             <b> <a href={{pose.replace(" ", "&")}} name={{pose}}>{{pose}}</a> </b>
+                            <br>
                             <i>External Resources</i>
                             <br>
                             <a href={{url}}>{{pose}}</a>
@@ -191,11 +192,11 @@
                         <td class="img_entry">
                             <iframe width="420" height="315" src=https://www.youtube.com/embed/{{video}}> </iframe>
                         </td>
-                        <td class="desc_entry">
+                        <!-- <td class="desc_entry">
                             <p>{{description}}</p>
-                        </td>
-                        <td class="desc_entry">
-                            <p><a href=/see_more/{{pose.replace(" ", "&")}} name={{pose}}>See more</a></p>
+                        </td> -->
+                        <td class="see-more_entry">
+                            <p class="see-more-text"><a href=/see_more/{{pose.replace(" ", "&")}} name={{pose}}>See more</a></p>
                         </td>
                         <!-- <td>
                             <form>

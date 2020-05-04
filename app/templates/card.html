@@ -6,7 +6,8 @@
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
 </head>
 
-<body style="background-color: rgb(255, 244, 227)"">
+<body id="body_card" style="background-color: rgb(255, 244, 227)"">
+  <button onclick="goBack()" class="back_button">Go Back to Search</button>
   <div class=" topcorner">
   <!--<p>Project Name: {{ name }}</p>-->
   <h3 style="font-size: 15px; font-family:Gill Sans; color: grey">
@@ -14,70 +15,85 @@
   </h3>
   <!--<p>Student Name: ({{ netid }})</p>-->
   </div>
+  <div id="card_content">
 
-  <h2 style="font-size: 100px; font-family:Gill Sans; color: rgb(18, 58, 110)">
-    {{pose}}
-    <img src=../static/yoga_journal_images/{{img}}>
-  </h2>
+    <h2 style="display:block;font-size: 70px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+      {{pose}}</h2>
+    <div style="width: 100%; display: table;">
+      <div style="display: table-row">
+          <div style="display: table-cell;width:40%;">
+            <img src=../static/yoga_journal_images/{{img}}>
+          </div>
+          {% if intro_exists %}
+          <div style="display: table-cell; vertical-align:top; text-align:center;">
+            <!-- <h3 style="font-size: 30px; font-family:Gill Sans; color: rgb(18, 58, 110);">
+              Information
+            </h3>
+            <p style="text-align:left; padding-left:10%;">{{introduction}}</p> -->
+            <h3 style="font-size: 30px;font-family:Gill Sans; color: rgb(18, 58, 110)">
+              Targeted Body Parts:
+            </h3>
+            <ul style="list-style-type: none;">
+              {% for bp in bps %}
+              <li>
+                {{bp}}<br>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+      </div>
+    </div>
 
-  <br>
+    <hr style="margin-top:40px;width:75%;text-align:center;border-top: 1px solid rgb(18, 58, 110);">
 
-  {% if intro_exists %}
-  <h3 style="font-size: 50px; font-family:Gill Sans; color: rgb(18, 58, 110)">
-    Introduction
-  </h3>
-  <p>{{introduction}}</p>
-  {% endif %}
+    <div style="width: 100%; display: table;">
+      <div style="display:table-row;">
+        <div style="display: table-cell;width:40%;">
+          <h3 style="font-size: 30px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+            Step by Step
+          </h3>
+    
+          {% for step in steps %}
+          <p>{{step}}</p><br>
+          {% endfor %}
+        </div>
+    
+        <div style="display: table-cell; padding-left:10%; vertical-align:top; text-align:center;">
+          <h3 style="font-size: 30px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+            Want more help doing {{pose}}? Watch this video:
+          </h3>
+          <iframe width="420" height="315" src=https://www.youtube.com/embed/{{video}}> </iframe>
+        </div>
+      </div>
 
-  <br>
+    </div>
+    
 
-  <h3 style="font-size: 50px; font-family:Gill Sans; color: rgb(18, 58, 110)">
-    Step by Step
-  </h3>
+    
 
-  {% for step in steps %}
-  <p>{{step}}</p><br>
-  {% endfor %}
+    <br>
 
-  <br>
+    {% if remarks_exists %}
+    <h3 style="font-size: 30px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+      Remarks
+    </h3>
+    <p>{{remarks}}</p>
+    {% endif %}
 
-  <h3 style="font-size: 50px; font-family:Gill Sans; color: rgb(18, 58, 110)">
-    Want more help doing {{pose}}? Watch this video:
-  </h3>
-  <iframe width="420" height="315" src=https://www.youtube.com/embed/{{video}}> </iframe>
 
-  <br>
+    <br>
 
-  {% if remarks_exists %}
-  <h3 style="font-size: 50px; font-family:Gill Sans; color: rgb(18, 58, 110)">
-    Remarks
-  </h3>
-  <p>{{remarks}}</p>
-  {% endif %}
+    <h4 style="display:inline;font-size: 15px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+      Original Site:  
+    </h4>
+    <a href={{external}}>{{pose}}</a>
 
-  <br>
+    <br>
 
-  <h3 style="font-size: 50px; font-family:Gill Sans; color: rgb(18, 58, 110)">
-    Targeted Body Parts:
-  </h3>
-
-  {% for bp in bps %}
-  <li>
-    {{bp}}<br>
-  </li>
-  {% endfor %}
-
-  <br>
-
-  <h4 style="font-size: 30px; font-family:Gill Sans; color: rgb(18, 58, 110)">
-    Original Site
-  </h4>
-  <a href={{external}}>{{pose}}</a>
-
-  <br>
-
-  <button onclick="goBack()">Go Back to Search</button>
-
+    
+  </div>
+  <button onclick="goBack()" class="bottom_back_button">Go Back to Search</button>
   <script>
     function goBack() {
       window.history.back();

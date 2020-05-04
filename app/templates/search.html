@@ -175,8 +175,8 @@
                 <b style="font-size:30px">{{k}}</b>
             </h3>
             <div
-                style="padding-left:0; text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110); padding-left: 14%; padding-right: 14%;">
-                <table>
+                style="text-align:center; list-style-position:inside; font-family:Gill Sans; color: rgb(18, 58, 110); padding-left: 14%; padding-right: 14%;">
+                <table >
                     {% for pose, url, img, video, description in data[k] %}
                     <tr>
                         <td class="pose_entry">
@@ -187,8 +187,8 @@
                             <a href={{url}}>• External Resources</a>
                         </td>
                         <td class="img_entry"><img src=static/yoga_journal_images/{{img}}> </td>
-                        <td class="img_entry">
-                            <iframe width="420" height="315" src=https://www.youtube.com/embed/{{video}}> </iframe>
+                        <td class="img_entry"style="padding-left:20px">
+                            <iframe width="267" height="200" src=https://www.youtube.com/embed/{{video}}> </iframe>
                         </td>
                         <!-- <td class="desc_entry">
                             <p>{{description}}</p>
@@ -208,6 +208,7 @@
                                     value="Irrelevant item"></a>
                         </td> -->
                     </tr>
+                    
                     {% endfor %}
                 </table>
 

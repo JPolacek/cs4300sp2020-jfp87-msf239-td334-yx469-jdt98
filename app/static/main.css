@@ -74,4 +74,9 @@ margin:2;
     padding-right:15x;
 }
 
-
+/* button:hover,
+button:focus {
+  color: #4285F4;
+  background-color: white;
+  /* border-bottom-color: #DCDCDC; */
+/* } */

@@ -262,7 +262,7 @@ def re_search(pose):
         output_message = no_result_text
     else:
         output_message = "Your search: " + pose + " "
-        import_data = bs
+        import_data = {body_parts : bs[body_parts] for body_parts in bs if len(bs[body_parts]) != 0}
 
     if pose in suggested_routine:
         suggested_routine.remove(pose)

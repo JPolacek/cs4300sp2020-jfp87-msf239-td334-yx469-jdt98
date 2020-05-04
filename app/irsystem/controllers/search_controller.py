@@ -4,6 +4,7 @@ from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 import itertools
 import json
 import re
+import pickle
 from app.irsystem.controllers.edit_distance import *
 from app.irsystem.controllers.search_functions import *
 import copy
@@ -17,13 +18,25 @@ valid_query_invalid_bp = "We're uncertain what body part you're looking for, you
 with open('data/description_yoga_json.json') as f:
     original_data = json.load(f)
 
+f = open('data/pose_names', 'rb')
+pose_names = pickle.load(f)
+f.close()
+
 
 def find_similar_query(query, query_list):
     all_body_parts = []
-    for stretch in data:
-        all_body_parts += data[stretch]["body_part"]
+    for stretch in original_data:
+        all_body_parts += original_data[stretch]["body_part"]
 
     return edit_distance_search(query, list(set(all_body_parts)))
+
+
+def find_similar_pose(pose):
+    all_poses = []
+    for stretch in original_data:
+        all_poses += [stretch]
+
+    return edit_distance_search(pose, list(set(all_poses)))
 
 
 def difficulty_to_level(difficulty):
@@ -58,6 +71,11 @@ def filter_data_based_on_difficulty(difficulty, original_data):
 
 @irsystem.route('/<pose>', methods=['GET'])
 def re_search(pose):
+
+    query_dict = dict(request.args.lists())
+    if query_dict != {}:
+        return search()
+
     pose = pose.replace("&", " ")
     no_result_text = ''
     potential_typos = []
@@ -74,6 +92,66 @@ def re_search(pose):
     else:
         output_message = "Your search: " + pose + " "
         import_data = bs
+
+    enumerate_routine = enumerate(suggested_routine)
+
+    routine_non_empty = True
+    if suggested_routine == []:
+        routine_non_empty = False
+
+    return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
+                           success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
+                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty)
+
+
+def search_by_pose(pose, additional_query, difficulty):
+
+    query = pose
+
+    no_result_text = ''
+    keys_to_remove = []
+    potential_typos = []
+    typos = False
+    no_known_typos = False
+
+    suggested_routine = []
+
+    bs = {}
+    if query:
+        if query in pose_names:
+            bs, suggested_routine = pose_search(
+                original_data, query, additional_query)
+
+            keys_to_remove = [key for key in bs if bs[key] == []]
+        else:
+            bs = ""
+            suggested_routine = []
+            potential_typos += [bp for dist, bp in
+                                find_similar_pose(query) if dist < 4 and dist > 0]
+            potential_typos = list(set(potential_typos))
+
+    for key in keys_to_remove:
+        del bs[key]
+
+    if len(bs) == 0:
+        if query:
+            import_data = potential_typos
+            no_result_text = 'There are no results for ' + query + \
+                ' :(\nConsider trying any of these other poses:'
+            if len(potential_typos) == 0:
+                no_known_typos = True
+                import_data = valid_query_invalid_bp
+        else:
+            import_data = [""]
+
+        output_message = no_result_text
+    else:
+        output_message = "Your search: " + query + " " + \
+            "[" + level_to_difficulty(difficulty) + "]"
+        import_data = bs
+
+    if query in suggested_routine:
+        suggested_routine.remove(query)
 
     enumerate_routine = enumerate(suggested_routine)
 
@@ -124,6 +202,16 @@ def search():
         difficulty = 0
         data = original_data
 
+    if "pose" in query_dict and query_dict["pose"] != [""]:
+        pose = query_dict["pose"]
+        pose = pose[0]
+    else:
+        pose = None
+
+    if pose != None:
+        print("hi")
+        return search_by_pose(pose, additional_query, difficulty)
+
     no_result_text = ''
     keys_to_remove = []
     potential_typos = []
@@ -150,7 +238,7 @@ def search():
     if len(bs) == 0:
         if query:
             import_data = potential_typos
-            no_result_text = 'There are no results for ' + query +\
+            no_result_text = 'There are no results for ' + query + \
                 ' :(\nConsider trying any of these other body areas:'
             if len(potential_typos) == 0:
                 no_known_typos = True

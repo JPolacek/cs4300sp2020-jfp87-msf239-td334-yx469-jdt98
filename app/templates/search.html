@@ -160,7 +160,7 @@
                     document.getElementById('btns-to-hide').style.display = 'block';
                     document.getElementById('btns-to-hide').style.display = 'none';
                     document.getElementById('prompt-thanks').innerHTML = "<p>Thank you for your feedback!</p>";
-                    $.post('/relevant', { response: 'relevant' });
+                    // $.post('/relevant', { response: 'relevant' });
                 }   
             </script>
         </div>
@@ -180,13 +180,11 @@
                     {% for pose, url, img, video, description in data[k] %}
                     <tr>
                         <td class="pose_entry">
-                            <i>Search for more related poses!</i>
+                            <b style="color: rgb(18, 58, 110);">{{pose}}</b>
                             <br>
-                            <b> <a href={{pose.replace(" ", "&")}} name={{pose}}>{{pose}}</a> </b>
+                            <a href={{pose.replace(" ", "&")}} name={{pose}}>• Search for more related poses!</a>
                             <br>
-                            <i>External Resources</i>
-                            <br>
-                            <a href={{url}}>{{pose}}</a>
+                            <a href={{url}}>• External Resources</a>
                         </td>
                         <td class="img_entry"><img src=static/yoga_journal_images/{{img}}> </td>
                         <td class="img_entry">

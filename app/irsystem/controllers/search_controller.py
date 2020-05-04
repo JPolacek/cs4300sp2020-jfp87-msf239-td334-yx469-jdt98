@@ -69,6 +69,16 @@ def filter_data_based_on_difficulty(difficulty, original_data):
     return new_data
 
 
+@irsystem.route('/relevant/<pose>', methods=['GET'])
+def update_relevant(pose):
+    return
+
+
+@irsystem.route('/irrelevant/<pose>', methods=['GET'])
+def update_irrelevant(pose):
+    return
+
+
 @irsystem.route('/<pose>', methods=['GET'])
 def re_search(pose):
 

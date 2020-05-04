@@ -42,6 +42,7 @@ python-dateutil==2.8.1
 python-editor==1.0.4
 python-engineio==3.11.2
 python-socketio==4.4.0
+pytrends==4.7.2
 pytz==2019.3
 redis==3.4.1
 requests==2.23.0

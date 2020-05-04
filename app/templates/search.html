@@ -7,16 +7,21 @@
 </head>
 
 <body style="background-color: rgb(255, 244, 227)">
-    <!-- <div class="topcorner">
-        <p>Project Name: {{ name }}</p>
-        <p>Student Name: ({{ netid }})</p>
-    </div> -->
+    <div class=" topcorner">
+        <!--<p>Project Name: {{ name }}</p>-->
+        <h3 style="font-size: 15px; font-family:Gill Sans; color: grey">
+            jfp87, msf239, td334, yx469, jdt98
+        </h3>
+        <!--<p>Student Name: ({{ netid }})</p>-->
+    </div>
     <form class="form-inline global-search">
         <!-- <h1 style="font-size: 55px; font-family:Geneva; color: rgb(18, 58, 110)">
                 Stretches
             </h1> -->
-
         <!-- <br><br> -->
+
+
+
         <h2 style="font-size: 180px; font-family:Gill Sans; color: rgb(18, 58, 110)">
             Flexy.
         </h2>
@@ -24,6 +29,9 @@
         <h3 style="font-size: 30px; font-family:Gill Sans; color: rgb(18, 58, 110)">
             generate a personalized stretching routine.
         </h3>
+
+
+
 
         <br><br>
 
@@ -33,7 +41,7 @@
         </div>
         <div class="form-group">
             <input id="input2" type="text" name="additional" class="form-control"
-                placeholder="other requests: easy, relaxed">
+                placeholder="other requests: equipment required, relaxed, with partner">
         </div>
 
 
@@ -42,6 +50,16 @@
 
 
         <button type="submit" class="btn btn-info"> Go! </button>
+
+        <!--         
+        <br>
+        <br>
+        <h4>Search by Pose!</h4>
+        <div class="form-group">
+            <input id="input_pose" type="text" name="pose" class="form-control" placeholder="Downward Dog">
+        </div>
+        <br>
+        -->
 
         <br>
         <p>Optional Parameters for Query</p>
@@ -60,9 +78,11 @@
         <br>
 
 
-        <h3 style="font-size: 15px; font-family:Gill Sans; color: grey">
+
+
+        <!--<h3 style="font-size: 15px; font-family:Gill Sans; color: grey">
             jfp87, msf239, td334, yx469, jdt98
-        </h3>
+        </h3>-->
     </form>
 
     {% if data %}

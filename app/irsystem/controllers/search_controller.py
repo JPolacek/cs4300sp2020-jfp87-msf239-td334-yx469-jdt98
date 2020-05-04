@@ -35,6 +35,16 @@ def difficulty_to_level(difficulty):
     return 0
 
 
+def level_to_difficulty(level):
+    if level == 1:
+        return 'Beginner'
+    if level == 2:
+        return 'Intermediate'
+    if level == 3:
+        return 'Advanced'
+    return "All Levels"
+
+
 def filter_data_based_on_difficulty(difficulty, original_data):
     if difficulty == 0:
         return copy.deepcopy(original_data)
@@ -83,7 +93,6 @@ def search():
         difficulty = 0
         data = original_data
 
-
     no_result_text = ''
     keys_to_remove = []
     potential_typos = []
@@ -120,7 +129,8 @@ def search():
 
         output_message = no_result_text
     else:
-        output_message = "Your search: " + query
+        output_message = "Your search: " + query + " " + \
+            "[" + level_to_difficulty(difficulty) + "]"
         import_data = bs
 
     enumerate_routine = enumerate(suggested_routine)

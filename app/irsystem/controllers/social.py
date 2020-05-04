@@ -12,6 +12,11 @@ engine.
 
 REDDIT_DATA_PATH = "data/reddit_pose_data.json"
 
+# get reddit data dictionary
+f = open(REDDIT_DATA_PATH, "rb")
+reddit_data_dict = json.load(f)
+f.close()
+
 
 def social_sort(dictionary, top_n=5):
     """
@@ -24,9 +29,9 @@ def social_sort(dictionary, top_n=5):
     """
 
     # get reddit data dictionary
-    f = open(REDDIT_DATA_PATH, "rb")
-    reddit_data_dict = json.load(f)
-    f.close()
+    # f = open(REDDIT_DATA_PATH, "rb")
+    # reddit_data_dict = json.load(f)
+    # f.close()
 
     ranked_dict = dict()
     for key in dictionary:
@@ -49,9 +54,9 @@ def social_sort(dictionary, top_n=5):
         # rejoin lists
         full_list = sorted_list + not_sort_list
 
-        #limit to 10 search results per pose
+        # limit to 10 search results per pose
         full_list = full_list[:10]
- 
+
         ranked_dict[key] = full_list
 
     return ranked_dict

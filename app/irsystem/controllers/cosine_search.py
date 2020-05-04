@@ -7,10 +7,23 @@ import pickle
 from app.irsystem.controllers.rocchio import *
 from app.irsystem.controllers.social import social_sort
 
+########## GLOBAL VARIABLES #########
+
 c_SPACE = " "
 
 
-USE_SOCIAL = True 
+USE_SOCIAL = True
+
+
+file_tf_idf_matrix = open("data/tf_idf_matrix", "rb")
+stretches_tf_idf = pickle.load(file_tf_idf_matrix)
+
+
+file_doc_to_index = open("data/doc_to_index", "rb")
+doc_to_index = pickle.load(file_doc_to_index)
+
+
+######### FUNCTIONS CALLED IN SEARCH FUNCTIONS #######
 
 
 def get_sim(query, input_doc_mat):
@@ -148,11 +161,11 @@ def query_descr_cossim(query_weights, description):
     ["../../../data/description_yoga_json.json"]
     """
 
-    file_tf_idf_matrix = open("data/tf_idf_matrix", "rb")
-    stretches_tf_idf = pickle.load(file_tf_idf_matrix)
+    # file_tf_idf_matrix = open("data/tf_idf_matrix", "rb")
+    # stretches_tf_idf = pickle.load(file_tf_idf_matrix)
 
-    file_doc_to_index = open("data/doc_to_index", "rb")
-    doc_to_index = pickle.load(file_doc_to_index)
+    # file_doc_to_index = open("data/doc_to_index", "rb")
+    # doc_to_index = pickle.load(file_doc_to_index)
 
     # index of where the description lies in the TF_IDF array
     description_idx = doc_to_index[description]

@@ -19,6 +19,27 @@ from collections import defaultdict
 
 DATABASE_PATH = "data/rocchio_database"
 
+# get tf-idf matrix
+f = open("data/tf_idf_matrix", "rb")
+tf_idf_matrix = pickle.load(f)
+f.close()
+
+# get pose_name_to_index_dictionary
+f = open("data/pose_name_to_index", "rb")
+pose_name_to_index = pickle.load(f)
+f.close()
+
+# get tf-idf trained tokenizer to tokenize the query
+f = open("data/tf_idf_vectorizer", "rb")
+tf_idf_vectorizer = pickle.load(f)
+f.close()
+
+# WARNING ! IF ROCCHIO GOES LIVE WITH UPDATING RELEVANCE?IRRELEVANCE, COMMENT THIS CODE OUT
+# get the database
+f = open(DATABASE_PATH, "rb")
+database = pickle.load(f)
+f.close()
+
 
 def add_relevant(boolean_query, pose_name, db_directory_path=DATABASE_PATH):
     """
@@ -178,10 +199,11 @@ def rocchio(boolean_query, cosine_query, db_directory_path=DATABASE_PATH):
     similarity is done at the same time or before rocchio()
     """
 
+    # WARNING! IF ROCCHIO GOES LIVE, MAKE THIS CODE LIVE AND UNCOMMENTED
     # get the database
-    f = open(db_directory_path, "rb")
-    database = pickle.load(f)
-    f.close()
+    # f = open(db_directory_path, "rb")
+    # database = pickle.load(f)
+    # f.close()
 
     # get relevant documents to the query
     relevant = []
@@ -261,19 +283,19 @@ WARNING: Default rocchip weights are a = 1, b = 0.8 and c = 0.1 as suggested onl
 """
 
     # get tf-idf matrix
-    f = open("data/tf_idf_matrix", "rb")
-    tf_idf_matrix = pickle.load(f)
-    f.close()
+    # f = open("data/tf_idf_matrix", "rb")
+    # tf_idf_matrix = pickle.load(f)
+    # f.close()
 
     # get pose_name_to_index_dictionary
-    f = open("data/pose_name_to_index", "rb")
-    pose_name_to_index = pickle.load(f)
-    f.close()
+    # f = open("data/pose_name_to_index", "rb")
+    # pose_name_to_index = pickle.load(f)
+    # f.close()
 
     # get tf-idf trained tokenizer to tokenize the query
-    f = open("data/tf_idf_vectorizer", "rb")
-    tf_idf_vectorizer = pickle.load(f)
-    f.close()
+    # f = open("data/tf_idf_vectorizer", "rb")
+    # tf_idf_vectorizer = pickle.load(f)
+    # f.close()
 
     l_relevant = len(relevant)
     l_relevant = l_relevant if l_relevant > 0 else 1  # handle no relevant docs

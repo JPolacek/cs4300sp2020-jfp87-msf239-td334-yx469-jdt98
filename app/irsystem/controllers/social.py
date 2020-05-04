@@ -3,6 +3,7 @@ import scipy
 import json
 import pickle
 import copy
+from pytrends.request import TrendReq
 
 """
 [social] deals with implementing social data into the search
@@ -16,6 +17,9 @@ REDDIT_DATA_PATH = "data/reddit_pose_data.json"
 f = open(REDDIT_DATA_PATH, "rb")
 reddit_data_dict = json.load(f)
 f.close()
+
+# initial pytrend for Google Trends
+pytrend = TrendReq()
 
 
 def social_sort(dictionary, top_n=5):
@@ -44,11 +48,20 @@ def social_sort(dictionary, top_n=5):
         if len_list >= top_n:
             to_sort_list = document_list[:top_n]
             not_sort_list = document_list[top_n:]
+        
+        # gather the trending info (i.e. how often it's mentioned) from Google Trends 
+        kw_list = [stretch[0] for stretch in to_sort_list]
+        pytrend.build_payload(kw_list=kw_list)
+        df = pytrend.interest_over_time()
+        df_sum = df.sum()
+        trending_dict = {stretch : df_sum.get(stretch) for stretch in kw_list}
+        sorted_trending = {s[0] : s[1] for s in 
+            sorted(trending_dict.items(), key=lambda x:x[1], reverse=True)}
 
         # sort the top_n documents by their reddit popularity
         sorted_list = sorted(
             to_sort_list,
-            key=lambda tup: reddit_data_dict[tup[0]],
+            key=lambda tup: reddit_data_dict[tup[0]] + sorted_trending[tup[0]],
             reverse=True)
 
         # rejoin lists

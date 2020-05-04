@@ -1,0 +1,87 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/main.css">
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+</head>
+
+<body style="background-color: rgb(255, 244, 227)"">
+  <div class=" topcorner">
+  <!--<p>Project Name: {{ name }}</p>-->
+  <h3 style="font-size: 15px; font-family:Gill Sans; color: grey">
+    jfp87, msf239, td334, yx469, jdt98
+  </h3>
+  <!--<p>Student Name: ({{ netid }})</p>-->
+  </div>
+
+  <h2 style="font-size: 100px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+    {{pose}}
+    <img src=../static/yoga_journal_images/{{img}}>
+  </h2>
+
+  <br>
+
+  {% if intro_exists %}
+  <h3 style="font-size: 50px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+    Introduction
+  </h3>
+  <p>{{introduction}}</p>
+  {% endif %}
+
+  <br>
+
+  <h3 style="font-size: 50px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+    Step by Step
+  </h3>
+
+  {% for step in steps %}
+  <p>{{step}}</p><br>
+  {% endfor %}
+
+  <br>
+
+  <h3 style="font-size: 50px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+    Want more help doing {{pose}}? Watch this video:
+  </h3>
+  <iframe width="420" height="315" src=https://www.youtube.com/embed/{{video}}> </iframe>
+
+  <br>
+
+  {% if remarks_exists %}
+  <h3 style="font-size: 50px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+    Remarks
+  </h3>
+  <p>{{remarks}}</p>
+  {% endif %}
+
+  <br>
+
+  <h3 style="font-size: 50px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+    Targeted Body Parts:
+  </h3>
+
+  {% for bp in bps %}
+  <li>
+    {{bp}}<br>
+  </li>
+  {% endfor %}
+
+  <br>
+
+  <h4 style="font-size: 30px; font-family:Gill Sans; color: rgb(18, 58, 110)">
+    Original Site
+  </h4>
+  <a href={{external}}>{{pose}}</a>
+
+  <br>
+
+  <button onclick="goBack()">Go Back to Search</button>
+
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+
+</html>

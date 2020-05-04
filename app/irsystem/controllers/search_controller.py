@@ -69,52 +69,18 @@ def filter_data_based_on_difficulty(difficulty, original_data):
     return new_data
 
 
-@irsystem.route('/relevant/<pose>', methods=['GET'])
-def update_relevant(pose):
+@irsystem.route('/relevant', methods=['POST'])
+def update_relevant():
+    print("Hello")
+    print(request.args.lists())
+
+
+@irsystem.route('/irrelevant', methods=['POST'])
+def update_irrelevant():
     return
 
 
-@irsystem.route('/irrelevant/<pose>', methods=['GET'])
-def update_irrelevant(pose):
-    return
-
-
-@irsystem.route('/<pose>', methods=['GET'])
-def re_search(pose):
-
-    query_dict = dict(request.args.lists())
-    if query_dict != {}:
-        return search()
-
-    pose = pose.replace("&", " ")
-    no_result_text = ''
-    potential_typos = []
-    typos = False
-    no_known_typos = False
-
-    suggested_routine = []
-
-    bs, suggested_routine = pose_search(original_data, pose, "")
-
-    if len(bs) == 0:
-
-        output_message = no_result_text
-    else:
-        output_message = "Your search: " + pose + " "
-        import_data = bs
-
-    enumerate_routine = enumerate(suggested_routine)
-
-    routine_non_empty = True
-    if suggested_routine == []:
-        routine_non_empty = False
-
-    return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
-                           success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
-                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty)
-
-
-def search_by_pose(pose, additional_query, difficulty):
+def search_by_pose(data, pose, additional_query, difficulty):
 
     query = pose
 
@@ -128,9 +94,9 @@ def search_by_pose(pose, additional_query, difficulty):
 
     bs = {}
     if query:
-        if query in pose_names:
+        if query in pose_names and query in data:
             bs, suggested_routine = pose_search(
-                original_data, query, additional_query)
+                data, query, additional_query)
 
             keys_to_remove = [key for key in bs if bs[key] == []]
         else:
@@ -146,7 +112,7 @@ def search_by_pose(pose, additional_query, difficulty):
     if len(bs) == 0:
         if query:
             import_data = potential_typos
-            no_result_text = 'There are no results for ' + query + \
+            no_result_text = 'There are no results for ' + query + ' at the requested difficulty' +\
                 ' :(\nConsider trying any of these other poses:'
             if len(potential_typos) == 0:
                 no_known_typos = True
@@ -220,8 +186,8 @@ def search():
 
     if pose != None:
         pose.lower()
-        pose = ' '.join([w[0].capitalize() + w[1:] for w in pose.split(' ')])
-        return search_by_pose(pose, additional_query, difficulty)
+        pose = ' '.join([w[0].capitalize() + w[1:] for w in filter(lambda elt : elt != "", pose.split(' '))])
+        return search_by_pose(data, pose, additional_query, difficulty)
 
     no_result_text = ''
     keys_to_remove = []
@@ -272,3 +238,81 @@ def search():
     return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
                            success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
                            no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty)
+
+
+@irsystem.route('/<pose>', methods=['GET'])
+def re_search(pose):
+
+    query_dict = dict(request.args.lists())
+    if query_dict != {}:
+        return search()
+
+    pose = pose.replace("&", " ")
+    no_result_text = ''
+    potential_typos = []
+    typos = False
+    no_known_typos = False
+
+    suggested_routine = []
+
+    bs, suggested_routine = pose_search(original_data, pose, "")
+
+    if len(bs) == 0:
+
+        output_message = no_result_text
+    else:
+        output_message = "Your search: " + pose + " "
+        import_data = bs
+
+    if pose in suggested_routine:
+        suggested_routine.remove(pose)
+
+    enumerate_routine = enumerate(suggested_routine)
+
+    routine_non_empty = True
+    if suggested_routine == []:
+        routine_non_empty = False
+
+    return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
+                           success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
+                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty)
+
+
+@irsystem.route('/see_more/<pose>', methods=['GET'])
+def see_more(pose):
+    pose = pose.replace("&", " ")
+    pose_data = original_data[pose]
+
+    introduction = pose_data["introduction"]
+    intro_exists = True
+    if introduction == [""]:
+        intro_exists = False
+    introduction = " ".join(introduction)
+
+    steps = pose_data["steps"]
+
+    remarks = pose_data["remarks"]
+    remarks_exists = True
+    if remarks == [""]:
+        remarks_exists = False
+    remarks = " ".join(remarks)
+
+    image = pose_data["image_name"]
+
+    video = pose_data["video_url"]
+
+    external = pose_data["url"]
+
+    body_parts = set(pose_data["body_part"])
+
+    return render_template('card.html', 
+    pose = pose, 
+    introduction = introduction, 
+    steps = steps, 
+    remarks = remarks,
+    intro_exists = intro_exists,
+    remarks_exists = remarks_exists,
+    img = image,
+    video = video,
+    external = external,
+    bps = body_parts)

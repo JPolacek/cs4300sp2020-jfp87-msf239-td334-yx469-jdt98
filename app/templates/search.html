@@ -132,12 +132,12 @@
             {% if routine_exists %}
             <i>Here is a suggested routine given your search: <br>
                 <ol style="text-align:center; list-style-position:inside; padding-left:0;">
-                {% for i, r in routine %}
-                <li>
-                    <!-- <b> <a onclick="(document.getElementById('{{r}}_section')).scrollIntoView(true)"> {{r}}</a> </b> -->
-                    <b> <a href={{r.replace(" ", "&")}} name={{r}}>{{r}}</a> </b>
-                </li>
-                {% endfor %}
+                    {% for i, r in routine %}
+                    <li>
+                        <!-- <b> <a onclick="(document.getElementById('{{r}}_section')).scrollIntoView(true)"> {{r}}</a> </b> -->
+                        <b> <a href={{r.replace(" ", "&")}} name={{r}}>{{r}}</a> </b>
+                    </li>
+                    {% endfor %}
                 </ol>
 
             </i>
@@ -147,19 +147,20 @@
             <i>No routine could be generated. Sorry :(</i>
             {% endif %}
             <br>
-            
-            <p id="prompt-thanks">Are these results helpful?</p>
+
+            <p id=" prompt-thanks">Are these results helpful?</p>
 
             <div id="btns-to-hide">
                 <button type="button" id="roch-btn-y" onclick="hideshow();">Yes</button>
                 <button type="button" id="roch-btn-n" onclick="hideshow();">No</button>
             </div>
             <script type="text/javascript">
-            
+
                 function hideshow() {
-                    document.getElementById('btns-to-hide').style.display = 'block'; 
+                    document.getElementById('btns-to-hide').style.display = 'block';
                     document.getElementById('btns-to-hide').style.display = 'none';
                     document.getElementById('prompt-thanks').innerHTML = "<p>Thank you for your feedback!</p>";
+                    $.post('/relevant', { response: 'relevant' });
                 }   
             </script>
         </div>
@@ -178,13 +179,23 @@
                 <table>
                     {% for pose, url, img, video, description in data[k] %}
                     <tr>
-                        <td class="pose_entry"><a href={{url}}>{{pose}}</a></td>
+                        <td class="pose_entry">
+                            <i>Search for more related poses!</i>
+                            <br>
+                            <b> <a href={{pose.replace(" ", "&")}} name={{pose}}>{{pose}}</a> </b>
+                            <i>External Resources</i>
+                            <br>
+                            <a href={{url}}>{{pose}}</a>
+                        </td>
                         <td class="img_entry"><img src=static/yoga_journal_images/{{img}}> </td>
                         <td class="img_entry">
                             <iframe width="420" height="315" src=https://www.youtube.com/embed/{{video}}> </iframe>
                         </td>
                         <td class="desc_entry">
                             <p>{{description}}</p>
+                        </td>
+                        <td class="desc_entry">
+                            <p><a href=/see_more/{{pose.replace(" ", "&")}} name={{pose}}>See more</a></p>
                         </td>
                         <!-- <td>
                             <form>

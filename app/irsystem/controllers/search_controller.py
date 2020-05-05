@@ -254,7 +254,7 @@ def search():
 
     return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
                            success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
-                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty, poses=pose_names, pose=query)
+                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty, poses=pose_names, pose=query, is_query=False)
 
 
 @irsystem.route('/<pose>', methods=['GET'])

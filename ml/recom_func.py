@@ -17,7 +17,7 @@ def get_recom(userinput):
     for i in userinput:
         numinput = le.transform([i])
         vinput = np.zeros(len(index_list)-1)
-        vinput[numinput] = 1
+        vinput[numinput - 1] = 1
         result.append(loadmodel.predict([vinput])[0])
 
     return result

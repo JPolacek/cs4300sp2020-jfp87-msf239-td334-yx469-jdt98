@@ -98,6 +98,21 @@ def search_by_pose(data, pose, additional_query, difficulty):
             bs, suggested_routine = pose_search(
                 data, query, additional_query)
 
+            ### MY RECENT CODE ###
+            query_in_results = False
+            for key in bs:
+                for (name_pose, a, b, c, d) in bs[key]:
+                    if name_pose == query:
+                        query_in_results = True
+
+            if not query_in_results:
+                tup = (query, original_data[query]["url"],
+                       original_data[query]["image_name"],
+                       original_data[query]["video_url"],
+                       ' '.join(original_data[query]["description"]))
+                bs[key] = [tup] + bs[key]
+            ### MY RECENT CODE ###
+
             keys_to_remove = [key for key in bs if bs[key] == []]
         else:
             bs = ""
@@ -137,7 +152,7 @@ def search_by_pose(data, pose, additional_query, difficulty):
 
     return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
                            success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
-                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty, poses=pose_names)
+                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty, poses=pose_names, pose=query, is_pose=True)
 
 
 @irsystem.route('/', methods=['GET'])
@@ -239,7 +254,7 @@ def search():
 
     return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
                            success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
-                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty, poses=pose_names)
+                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty, poses=pose_names, pose=query)
 
 
 @irsystem.route('/<pose>', methods=['GET'])
@@ -258,6 +273,22 @@ def re_search(pose):
     suggested_routine = []
 
     bs, suggested_routine = pose_search(original_data, pose, "")
+
+    ### MY RECENT CODE ###
+    query = pose
+    query_in_results = False
+    for key in bs:
+        for (name_pose, a, b, c, d) in bs[key]:
+            if name_pose == query:
+                query_in_results = True
+
+    if not query_in_results:
+        tup = (query, original_data[query]["url"],
+               original_data[query]["image_name"],
+               original_data[query]["video_url"],
+               ' '.join(original_data[query]["description"]))
+        bs[key] = [tup] + bs[key]
+    ### MY RECENT CODE ###
 
     if len(bs) == 0:
 
@@ -278,7 +309,7 @@ def re_search(pose):
 
     return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
                            success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
-                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty, poses=pose_names)
+                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty, poses=pose_names, pose=query, is_pose=True)
 
 
 @irsystem.route('/see_more/<pose>', methods=['GET'])

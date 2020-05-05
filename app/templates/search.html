@@ -114,8 +114,15 @@
     </form>
 
     {% if data %}
+    {% if is_pose %}
+    <h1 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110)">Your Search: <a
+            onclick="(document.getElementById('{{pose}}_section')).scrollIntoView(true)">{{pose}}</a></h1>
+    {% else %}
     <h1 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110)">{{output_message}}</h1>
+    {% endif %}
+
     <div style="display: flex; flex-direction: column;text-align: center; justify-content:center;">
+
         {% if success %}
         <!-- There were results generated based on the search query -->
         {% if typos %}
@@ -188,7 +195,7 @@
                     document.getElementById('btns-to-hide').style.display = 'block';
                     document.getElementById('btns-to-hide').style.display = 'none';
                     document.getElementById('prompt-thanks').innerHTML = "<p>Thank you for your feedback!</p>";
-                    // $.post('/relevant', { response: 'relevant' });
+
                 }   
             </script>
         </div>
@@ -199,7 +206,7 @@
         <!-- Print out all of the poses that were successfully found -->
         <div margin=0 align="center" style="font-family:Gill Sans; color: rgb(18, 58, 110);display: inline-block">
             <br>
-            <h3 id="{{k}}_section">
+            <h3 id="{{k.replace('and', "\,")}}_section">
                 <b style="font-size:30px">{{k}}</b>
             </h3>
             <div
@@ -210,7 +217,8 @@
                         <td class="pose_entry">
                             <b style="color: rgb(18, 58, 110);">{{pose}}</b>
                             <br>
-                            <a href={{pose.replace(" ", "&")}} name={{pose}}>• Search for more related poses!</a>
+                            <a href={{pose.replace(" ", "&")}} id="{{pose}}_section" name={{pose}}>• Search for more
+                                related poses!</a>
                             <br>
                             <a href={{url}}>• External Resources</a>
                         </td>

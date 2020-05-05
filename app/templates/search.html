@@ -4,6 +4,24 @@
     <link rel="stylesheet" href="/static/bootstrap.min.css">
     <link rel="stylesheet" href="/static/main.css">
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+
+
+    <script>
+        // add scrolling to view functionality
+        var full_lst = ["Mexico", "US"]
+        function generate() {
+            var id = String(name) + "_section";
+            console.log(id);
+            var element = document.getElementById(id);
+            console.log(element);
+            element.scrollIntoView(true);
+            alert("HI");
+            // (document.getElementById("{{k}}_section")).scrollIntoView(true);
+            return full_lst;
+        }
+
+    </script>
+
 </head>
 
 <body id="body_search" style="background-color: rgb(255, 244, 227)">
@@ -52,13 +70,23 @@
         <button type="submit" class="btn btn-info"> Go! </button>
 
 
+        <datalist id="input_pose">
+            {% for item in poses %}
+            <option value="{{item}}">
+                {% endfor %}
+        </datalist>
+
+
         <br>
         <br>
-        <h4 style="font-size: 22px; font-family:Gill Sans; color: rgb(18, 58, 110)">Search by Pose!</h4>
+        <h4 style=" font-size: 22px; font-family:Gill Sans; color: rgb(18, 58, 110)">Search by Pose!</h4>
         <div class="form-group">
-            <input id="input_pose" type="text" name="pose" class="form-control" placeholder="Cat Pose">
+            <input list="input_pose" id="input_pose" type="text" name="pose" class="form-control"
+                placeholder="Cat Pose">
         </div>
         <br>
+
+
 
 
         <br>
@@ -187,14 +215,15 @@
                             <a href={{url}}>• External Resources</a>
                         </td>
                         <td class="img_entry"><img src=static/yoga_journal_images/{{img}}> </td>
-                        <td class="img_entry"style="padding-left:20px">
+                        <td class="img_entry" style="padding-left:20px">
                             <iframe width="267" height="200" src=https://www.youtube.com/embed/{{video}}> </iframe>
                         </td>
                         <!-- <td class="desc_entry">
                             <p>{{description}}</p>
                         </td> -->
                         <td class="see-more_entry">
-                            <p class="see-more-text"><a href=/see_more/{{pose.replace(" ", "&")}} name={{pose}}>See more</a></p>
+                            <p class="see-more-text"><a href=/see_more/{{pose.replace(" ", "&")}} name={{pose}}>See
+                                    more</a></p>
                         </td>
                         <!-- <td>
                             <form>
@@ -208,7 +237,7 @@
                                     value="Irrelevant item"></a>
                         </td> -->
                     </tr>
-                    
+
                     {% endfor %}
                 </table>
 

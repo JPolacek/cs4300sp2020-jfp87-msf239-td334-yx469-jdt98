@@ -137,7 +137,7 @@ def search_by_pose(data, pose, additional_query, difficulty):
 
     return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
                            success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
-                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty)
+                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty, poses=pose_names)
 
 
 @irsystem.route('/', methods=['GET'])
@@ -186,7 +186,8 @@ def search():
 
     if pose != None:
         pose.lower()
-        pose = ' '.join([w[0].capitalize() + w[1:] for w in filter(lambda elt : elt != "", pose.split(' '))])
+        pose = ' '.join([w[0].capitalize() + w[1:]
+                         for w in filter(lambda elt: elt != "", pose.split(' '))])
         return search_by_pose(data, pose, additional_query, difficulty)
 
     no_result_text = ''
@@ -227,7 +228,8 @@ def search():
     else:
         output_message = "Your search: " + query + " " + \
             "[" + level_to_difficulty(difficulty) + "]"
-        import_data = {stretch_tup[0].title() : stretch_tup[1] for stretch_tup in sorted(bs.items(), key=lambda tup : len(tup[0]), reverse=True)}
+        import_data = {stretch_tup[0].title(): stretch_tup[1] for stretch_tup in sorted(
+            bs.items(), key=lambda tup: len(tup[0]), reverse=True)}
 
     enumerate_routine = enumerate(suggested_routine)
 
@@ -237,7 +239,7 @@ def search():
 
     return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
                            success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
-                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty)
+                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty, poses=pose_names)
 
 
 @irsystem.route('/<pose>', methods=['GET'])
@@ -262,7 +264,8 @@ def re_search(pose):
         output_message = no_result_text
     else:
         output_message = "Your search: " + pose + " "
-        import_data = {body_parts : bs[body_parts] for body_parts in bs if len(bs[body_parts]) != 0}
+        import_data = {body_parts: bs[body_parts]
+                       for body_parts in bs if len(bs[body_parts]) != 0}
 
     if pose in suggested_routine:
         suggested_routine.remove(pose)
@@ -275,7 +278,7 @@ def re_search(pose):
 
     return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=import_data,
                            success=(len(bs) != 0), potential_typos=potential_typos, typos=typos,
-                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty)
+                           no_known_typos=no_known_typos, routine=enumerate_routine, routine_exists=routine_non_empty, poses=pose_names)
 
 
 @irsystem.route('/see_more/<pose>', methods=['GET'])
@@ -305,14 +308,14 @@ def see_more(pose):
 
     body_parts = set(pose_data["body_part"])
 
-    return render_template('card.html', 
-    pose = pose, 
-    introduction = introduction, 
-    steps = steps, 
-    remarks = remarks,
-    intro_exists = intro_exists,
-    remarks_exists = remarks_exists,
-    img = image,
-    video = video,
-    external = external,
-    bps = body_parts)
+    return render_template('card.html',
+                           pose=pose,
+                           introduction=introduction,
+                           steps=steps,
+                           remarks=remarks,
+                           intro_exists=intro_exists,
+                           remarks_exists=remarks_exists,
+                           img=image,
+                           video=video,
+                           external=external,
+                           bps=body_parts)
